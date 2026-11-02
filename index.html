@@ -108,7 +108,18 @@ main.loading{opacity:.55}
 #exportBox textarea{width:100%;min-height:140px;font:12px ui-monospace,Menlo,monospace;background:var(--soft);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px}
 input[readonly]{background:var(--soft)!important;border-color:var(--line)!important;color:var(--ink)!important}
 </style>
-<style>[hidden]{display:none!important}</style>
+<style>[hidden]{display:none!important}
+.login{max-width:420px;margin:40px auto}
+.login form{display:grid;gap:12px}
+.login .row{display:flex;gap:8px;flex-wrap:wrap}
+.login .row button{flex:1 1 140px}
+.login .msg{font-size:13px;min-height:1.2em;color:var(--muted)}
+.login .msg.err{color:var(--bad)}
+button.primary{background:var(--green-action);color:#fff;border-color:var(--green-action)}
+.user-chip{align-self:center;font-size:12px;color:var(--hdr-sub)}
+</style>
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 </head>
 <body>
 <header class="top">
@@ -117,13 +128,27 @@ input[readonly]{background:var(--soft)!important;border-color:var(--line)!import
       <h1>Costos de importación y precios de venta</h1>
       <p>High Duo · Costo real (sin impuestos deducibles) → precio Mercado Libre y Tienda Nube</p>
     </div>
-    <div class="actions"><span id="syncState" class="sync" hidden></span>
+    <div class="actions"><span id="syncState" class="sync" hidden></span><span id="userChip" class="user-chip" hidden></span><button id="btnLogout" type="button" hidden>Cerrar sesión</button>
       <button id="btnExport" type="button">Exportar pedido</button>
       <button id="btnImport" type="button">Importar pedido</button>
       <input id="fileImport" type="file" accept="application/json,.json" hidden />
     </div>
   </div>
 </header>
+
+<section class="card login" id="loginBox" hidden>
+  <div class="card-head"><h2>Ingresá a tu cuenta</h2></div>
+  <p class="hint">Tus pedidos se guardan en tu cuenta y los ves desde cualquier dispositivo.</p>
+  <form id="loginForm">
+    <label class="f">Email<input id="loginEmail" type="email" autocomplete="email" required></label>
+    <label class="f">Contraseña<input id="loginPass" type="password" autocomplete="current-password" minlength="6" required></label>
+    <div class="row">
+      <button type="submit" class="primary" id="btnLogin">Ingresar</button>
+      <button type="button" id="btnSignup">Crear cuenta</button>
+    </div>
+    <p class="msg" id="loginMsg" role="status"></p>
+  </form>
+</section>
 
 <main class="wrap">
 
@@ -416,6 +441,52 @@ var Local = {
   remove: function(id){ var o = this._all(); delete o[id]; lsSet(LSKEY, JSON.stringify(o)); return Promise.resolve(); }
 };
 // Guardado en la cuenta (página publicada en Claude)
+function Supa(sb){
+  var t = function(r){ if (r.error) throw r.error; return r.data; };
+  return {
+    nombre: 'tu cuenta',
+    list: function(){ return sb.from('pedidos').select('id,nombre,creado,actualizado').then(t); },
+    get: function(id){ return sb.from('pedidos').select('datos').eq('id', id).maybeSingle().then(t).then(function(r){ return r ? r.datos : null; }); },
+    save: function(id, meta, json){ return sb.from('pedidos').upsert({id:id, nombre:meta.nombre, creado:meta.creado, actualizado:meta.actualizado, datos:JSON.parse(json)}).then(t); },
+    remove: function(id){ return sb.from('pedidos').delete().eq('id', id).then(t); }
+  };
+}
+function crearClienteSupabase(){
+  var c = window.HD_SUPABASE;
+  if (!c || !c.url || !c.anonKey || !window.supabase) return null;
+  try { return window.supabase.createClient(c.url, c.anonKey); } catch(e){ return null; }
+}
+function textoError(err){
+  var m = (err && err.message) || '';
+  if (/invalid login credentials/i.test(m)) return 'Email o contraseña incorrectos.';
+  if (/email not confirmed/i.test(m)) return 'Tenés que confirmar tu email: revisá tu casilla.';
+  if (/already registered/i.test(m)) return 'Ese email ya tiene cuenta. Usá "Ingresar".';
+  if (/password should be at least/i.test(m)) return 'La contraseña tiene que tener al menos 6 caracteres.';
+  return m || 'No se pudo completar. Probá de nuevo.';
+}
+function pedirLogin(sb){
+  return new Promise(function(resolve){
+    document.querySelector('main').hidden = true;
+    $('loginBox').hidden = false;
+    var msg = function(t, err){ $('loginMsg').textContent = t; $('loginMsg').className = 'msg' + (err ? ' err' : ''); };
+    $('loginForm').addEventListener('submit', function(e){
+      e.preventDefault(); msg('Ingresando…');
+      sb.auth.signInWithPassword({email:$('loginEmail').value.trim(), password:$('loginPass').value}).then(function(r){
+        if (r.error) return msg(textoError(r.error), true);
+        $('loginBox').hidden = true; document.querySelector('main').hidden = false; resolve(r.data.session);
+      });
+    });
+    $('btnSignup').addEventListener('click', function(){
+      if (!$('loginForm').reportValidity()) return;
+      msg('Creando cuenta…');
+      sb.auth.signUp({email:$('loginEmail').value.trim(), password:$('loginPass').value}).then(function(r){
+        if (r.error) return msg(textoError(r.error), true);
+        if (!r.data.session) return msg('Cuenta creada. Te mandamos un email para confirmarla; después ingresá acá.');
+        $('loginBox').hidden = true; document.querySelector('main').hidden = false; resolve(r.data.session);
+      });
+    });
+  });
+}
 function Remote(db){
   var col = db.collection('pedidos');
   return {
@@ -940,7 +1011,17 @@ document.querySelector('main').inert = true;
   if (IN_CLAUDE){
     try { db = await Promise.race([window.claude.use('db'), new Promise(function(r){ setTimeout(function(){ r(null); }, 10000); })]); } catch(e){ db = null; }
   }
-  STORE_ = db ? Remote(db) : Local;
+  var sb = db ? null : crearClienteSupabase();
+  if (sb){
+    var ses = (await sb.auth.getSession()).data.session;
+    if (!ses) ses = await pedirLogin(sb);
+    $('userChip').textContent = ses.user.email; $('userChip').hidden = false;
+    $('btnLogout').hidden = false;
+    $('btnLogout').addEventListener('click', function(){ flush().then(function(){ return sb.auth.signOut(); }).then(function(){ location.reload(); }); });
+    STORE_ = Supa(sb);
+  } else {
+    STORE_ = db ? Remote(db) : Local;
+  }
   try { LISTA = await STORE_.list(); }
   catch(e){ STORE_ = Local; LISTA = await Local.list(); }
   if (!LISTA.length){
