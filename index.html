@@ -58,6 +58,8 @@ button.del:hover{color:var(--bad)}
 .cols2{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(420px,1fr))}
 .cols2>*{min-width:0}
 .stack{display:grid;gap:16px}.stack>*{min-width:0}
+.col-right{align-content:start}.col-right>.card{margin-bottom:0}
+#tbTax td{padding:8px 10px}#tbTax tr.res td{font-weight:700;background:var(--soft)}#tbTax tr.res td.out{color:var(--green-deep);font-size:14px}#tbTax .menos{color:var(--muted)}
 td input.num{min-width:110px}
 @media (max-width:520px){.cols2{grid-template-columns:1fr}}
 label.f{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted);font-weight:600}
@@ -255,13 +257,13 @@ button.primary:hover{background:var(--green-deep);color:var(--white);border-colo
         </div>
         <div class="tbl-wrap">
           <table>
-            <thead><tr><th>Impuesto</th><th class="r">%</th><th class="r">o monto fijo USD</th><th>Base</th><th class="c">Deducible</th><th class="r">USD</th><th></th></tr></thead>
+            <thead><tr><th>Impuesto</th><th class="r">%</th><th class="r">o monto fijo USD</th><th class="r">o monto fijo ARS</th><th>Base</th><th class="c">Deducible</th><th class="r">USD</th><th></th></tr></thead>
             <tbody id="tbImpuestos"></tbody>
-            <tfoot><tr class="tot"><td colspan="5">Subtotal impuestos</td><td class="out" id="totImp"></td><td></td></tr></tfoot>
+            <tfoot><tr class="tot"><td colspan="6">Subtotal impuestos</td><td class="out" id="totImp"></td><td></td></tr></tfoot>
           </table>
         </div>
         <button class="add" type="button" data-add="impuestos">+ Agregar impuesto</button>
-        <p class="hint" id="cifHint"></p><p class="hint">CIF = FOB + flete + seguro declarados. Si cargás el total de impuestos del presupuesto, el CIF se calcula solo para que el total coincida, con los mismos %. Los impuestos con base "CIF" (arancel, tasa) forman la Base IVA. Si cargás un monto fijo, reemplaza al %.</p>
+        <p class="hint" id="cifHint"></p><p class="hint">CIF = FOB + flete + seguro declarados. Si cargás el total de impuestos del presupuesto, el CIF se calcula solo para que el total coincida, con los mismos %. Los impuestos con base "CIF" (arancel, tasa) forman la Base IVA. Si cargás un monto fijo (en USD o en ARS), reemplaza al %. Si cargás los dos, se usa el de USD.</p>
       </div>
     </div>
 
@@ -326,6 +328,7 @@ button.primary:hover{background:var(--green-deep);color:var(--white);border-colo
       <button class="add" type="button" data-add="envios">+ Agregar peso</button>
     </section>
 
+    <div class="stack col-right">
     <section class="card">
       <div class="card-head"><h2>5 · Tienda Nube</h2></div>
       <div class="grid">
@@ -341,6 +344,30 @@ button.primary:hover{background:var(--green-deep);color:var(--white);border-colo
         <br>Poné 0% en "IVA sobre comisiones" si tomás ese IVA como crédito fiscal.
       </div>
     </section>
+
+    <section class="card" id="taxCard">
+      <div class="card-head"><h2>Impuestos a pagar por la venta del lote</h2></div>
+      <div class="grid">
+        <label class="f">Si vendo todo el lote por
+          <select data-k="proy">
+            <option value="ml">Mercado Libre</option>
+            <option value="tn">Tienda Nube lista</option>
+            <option value="tx">Tienda Nube transf.</option>
+          </select>
+        </label>
+        <label class="f">IIBB de aduana
+          <select data-k="proyIibb">
+            <option value="no">No descontar</option>
+            <option value="si">Descontar</option>
+          </select>
+        </label>
+      </div>
+      <div class="tbl-wrap" style="margin-top:12px">
+        <table><tbody id="tbTax"></tbody></table>
+      </div>
+      <p class="hint">Usa el precio de cada producto en ese canal (tu precio si lo cargaste, si no el sugerido) por la cantidad del lote. IVA débito e IIBB se calculan sobre el precio neto (sin IVA ni IIBB). El crédito de IVA es el IVA y el IVA adicional pagados en aduana. No incluye el IVA de comisiones ni de otras compras.</p>
+    </section>
+    </div>
   </div>
 
   <!-- ========== PRECIOS ========== -->
@@ -389,7 +416,7 @@ var uid = function(){ return Math.random().toString(36).slice(2,9); };
 
 function ejemplo(){
   return {
-    tc:1530, margen:25, iva:21, iibb:3, redondeo:100, metodo:'mixto', impObjetivo:4004,
+    tc:1530, margen:25, iva:21, iibb:3, redondeo:100, metodo:'mixto', impObjetivo:4004, proy:'ml', proyIibb:'no',
     fleteDecl:1236, seguroDecl:80,
     productos:[
       {id:uid(), nombre:'Lote ejemplo (reemplazá por tus productos)', qty:1000, fob:3.917, cbm:13.2, peso:0.5, mlManual:'', tnManual:''}
@@ -598,6 +625,7 @@ function renderInputs(){
       '<td>'+inp('impuestos',t.id,'concepto',t.concepto,{text:true,cls:'name'})+'</td>'+
       '<td style="width:90px">'+inp('impuestos',t.id,'pct',t.pct)+'</td>'+
       '<td style="width:110px">'+inp('impuestos',t.id,'fijo',t.fijo,{ph:'—'})+'</td>'+
+      '<td style="width:130px">'+inp('impuestos',t.id,'fijoArs',t.fijoArs,{ph:'—'})+'</td>'+
       '<td>'+sel('impuestos',t.id,'base',t.base,[['cif','CIF'],['iva','Base IVA']])+'</td>'+
       '<td class="c">'+chk('impuestos',t.id,'deducible',t.deducible)+'</td>'+
       '<td class="out" id="iu_'+t.id+'"></td>'+
@@ -655,23 +683,25 @@ function calcImport(){
     return {g:g, usd:u, base:base};
   });
 
-  var fijo = function(t){ return t.fijo !== '' && t.fijo != null && isFinite(parseFloat(t.fijo)); };
+  var lleno = function(v){ return v !== '' && v != null && isFinite(parseFloat(v)); };
+  var montoFijo = function(t){ if (lleno(t.fijo)) return n(t.fijo); if (lleno(t.fijoArs) && tc > 0) return n(t.fijoArs)/tc; return null; };
+  var fijo = function(t){ return montoFijo(t) !== null; };
   var cif = fobTot + n(S.fleteDecl) + n(S.seguroDecl), cifAjustado = false;
   if (n(S.impObjetivo) > 0){
     // total = CIF*sc + Fc + (CIF*(1+sc) + Fc)*si + Fi  ->  despejar CIF
     var sc=0, si=0, Fc=0, Fi=0;
     S.impuestos.forEach(function(t){
-      if (t.base === 'cif'){ if (fijo(t)) Fc += n(t.fijo); else sc += n(t.pct)/100; }
-      else { if (fijo(t)) Fi += n(t.fijo); else si += n(t.pct)/100; }
+      if (t.base === 'cif'){ if (fijo(t)) Fc += montoFijo(t); else sc += n(t.pct)/100; }
+      else { if (fijo(t)) Fi += montoFijo(t); else si += n(t.pct)/100; }
     });
     var den = sc + (1+sc)*si;
     if (den > 0){ cif = (n(S.impObjetivo) - Fc - Fc*si - Fi)/den; cifAjustado = true; }
   }
   var derechos = 0;
   var imps = S.impuestos.map(function(t){ return {t:t, usd:0}; });
-  imps.forEach(function(x){ if (x.t.base === 'cif'){ x.usd = fijo(x.t) ? n(x.t.fijo) : cif*n(x.t.pct)/100; derechos += x.usd; } });
+  imps.forEach(function(x){ if (x.t.base === 'cif'){ x.usd = fijo(x.t) ? montoFijo(x.t) : cif*n(x.t.pct)/100; derechos += x.usd; } });
   var baseIva = cif + derechos;
-  imps.forEach(function(x){ if (x.t.base !== 'cif'){ x.usd = fijo(x.t) ? n(x.t.fijo) : baseIva*n(x.t.pct)/100; } });
+  imps.forEach(function(x){ if (x.t.base !== 'cif'){ x.usd = fijo(x.t) ? montoFijo(x.t) : baseIva*n(x.t.pct)/100; } });
 
   var R = {cifAjustado:cifAjustado, tc:tc, fobTot:fobTot, cbmTot:cbmTot, cif:cif, baseIva:baseIva, gastos:gastos, imps:imps,
     gastosTot:0, gastosDed:0, impTot:0, impDed:0};
@@ -828,6 +858,7 @@ function recalc(){
   var d = n(S.tn.desc)/100;
   var alertas = [];
 
+  var vta = {ml:0, tn:0, tx:0};
   R.prods.forEach(function(x){
     var id = x.p.id, costo = x.realU*tc, peso = n(x.p.peso);
     $('rn_'+id).textContent = x.p.nombre || '—';
@@ -842,6 +873,7 @@ function recalc(){
       $('mc_'+id).innerHTML = ars(m.cargo)+'<span class="sub">'+(m.tipo==='envio'?'envío ('+fNum.format(peso)+' kg)':'costo x unidad')+'</span>';
       $('mg_'+id).textContent = ars(m.gan);
       $('mm_'+id).innerHTML = pillM(m.margen, r);
+      vta.ml += pML * x.qty;
     } else { $('mc_'+id).textContent = $('mg_'+id).textContent = $('mm_'+id).textContent = '—'; }
 
     var sugT = precioTN(costo, k, r);
@@ -855,8 +887,36 @@ function recalc(){
       $('tm_'+id).innerHTML = pillM(mt.margen, r)+'<span class="sub">gan. '+ars(mt.gan)+'</span>';
       $('xs_'+id).innerHTML = '<span class="price">'+ars(pX)+'</span>';
       $('xm_'+id).innerHTML = pillM(mx.margen, r)+'<span class="sub">gan. '+ars(mx.gan)+'</span>';
+      vta.tn += pTN * x.qty; vta.tx += pX * x.qty;
     } else { $('tm_'+id).textContent = $('xs_'+id).textContent = $('xm_'+id).textContent = '—'; }
   });
+
+  // ---- impuestos a pagar por la venta del lote
+  var canal = S.proy || 'ml';
+  var ventas = vta[canal] || 0, neto = ventas / k;
+  var ivaDeb = neto * n(S.iva)/100, iibbVta = neto * n(S.iibb)/100;
+  var ivaCred = 0, ganCred = 0, iibbAd = 0;
+  R.imps.forEach(function(ix){
+    var c = String(ix.t.concepto||'').toLowerCase(), a = ix.usd * tc;
+    if (ix.t.deducible && /iva/.test(c)) ivaCred += a;
+    else if (ix.t.deducible && /ganancia/.test(c)) ganCred += a;
+    if (/iibb|ingresos brutos/.test(c)) iibbAd += a;
+  });
+  var ivaPagar = ivaDeb - ivaCred;
+  var iibbDesc = S.proyIibb === 'si' ? Math.min(iibbAd, iibbVta) : 0;
+  var iibbPagar = iibbVta - iibbDesc;
+  var fila = function(l, v, cls){ return '<tr'+(cls?' class="'+cls+'"':'')+'><td>'+l+'</td><td class="out">'+v+'</td></tr>'; };
+  $('tbTax').innerHTML =
+    fila('Ventas totales (con IVA e IIBB)', ars(ventas)) +
+    fila('Precio neto total (sin impuestos)', ars(neto)) +
+    fila('IVA débito ('+fNum.format(n(S.iva))+'% sobre neto)', ars(ivaDeb)) +
+    fila('<span class="menos">− IVA crédito de importación (IVA + IVA adicional)</span>', '<span class="menos">− '+ars(ivaCred)+'</span>') +
+    fila(ivaPagar >= 0 ? 'IVA a pagar' : 'Saldo a favor de IVA', ars(Math.abs(ivaPagar)), 'res') +
+    fila('IIBB ('+fNum.format(n(S.iibb))+'% sobre neto)', ars(iibbVta)) +
+    (S.proyIibb === 'si' ? fila('<span class="menos">− IIBB pagado en aduana</span>', '<span class="menos">− '+ars(iibbDesc)+'</span>') : '') +
+    fila('IIBB a pagar', ars(iibbPagar), 'res') +
+    fila('Total IVA + IIBB a pagar', ars(Math.max(ivaPagar,0) + iibbPagar), 'res') +
+    (ganCred > 0 ? fila('<span class="menos">Ganancias pagado en aduana (a cuenta del impuesto a las Ganancias)</span>', '<span class="menos">'+ars(ganCred)+'</span>') : '');
 
   if (1 - r - n(S.ml.com)/100*k <= 0) alertas.push('Con esa rentabilidad y comisión, Mercado Libre no tiene precio posible: bajá la rentabilidad objetivo o revisá la comisión.');
   if (1 - r - comTN(S.tn.comNube)*k <= 0) alertas.push('Con esa rentabilidad y comisión, Tienda Nube no tiene precio posible.');
@@ -901,7 +961,7 @@ document.addEventListener('click', function(e){
     var nuevos = {
       productos:{id:uid(), nombre:'', qty:0, fob:0, cbm:0, peso:0, mlManual:'', tnManual:''},
       gastos:{id:uid(), concepto:'', moneda:'ARS', monto:0, deducible:false},
-      impuestos:{id:uid(), concepto:'', pct:0, fijo:'', base:'iva', deducible:false},
+      impuestos:{id:uid(), concepto:'', pct:0, fijo:'', fijoArs:'', base:'iva', deducible:false},
       tramos:{id:uid(), hasta:0, cargo:0},
       envios:{id:uid(), peso:0, medio:0, alto:0}
     };
@@ -961,6 +1021,7 @@ function abrirPedido(id){
   return flush().then(function(){ return STORE_.get(id); }).then(function(st){
     var meta = LISTA.filter(function(x){ return x.id === id; })[0] || {id:id};
     S = valido(st) ? st : ejemplo();
+    if (!S.proy) S.proy = 'ml'; if (!S.proyIibb) S.proyIibb = 'no';
     PED = {id:id, nombre:meta.nombre, creado:meta.creado, actualizado:meta.actualizado};
     lsSet(PREF, id);
     $('delBox').hidden = true; $('alertas').textContent = '';
@@ -981,7 +1042,7 @@ function pedidoVacio(base){
   var st = JSON.parse(JSON.stringify(base));
   st.productos = [{id:uid(), nombre:'', qty:0, fob:0, cbm:0, peso:0, mlManual:'', tnManual:''}];
   st.gastos.forEach(function(g){ g.monto = 0; });
-  st.impuestos.forEach(function(t){ t.fijo = ''; });
+  st.impuestos.forEach(function(t){ t.fijo = ''; t.fijoArs = ''; });
   st.impObjetivo = ''; delete st._mod;
   return st;
 }
