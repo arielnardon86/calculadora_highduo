@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Costos de importación High Duo</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --green-deep:#1A3C34; --green-action:#2E7D52; --green-light:#6BBF8E; --green-pale:#C8E6C9;
+  --bg:#F4F7F4; --card:#FFFFFF; --ink:#2D2D2D; --muted:#6B7280; --line:#E3E8E4;
+  --edit:#EEF4FF; --edit-line:#B9CCF5; --edit-ink:#1D3F8F;
+  --bad:#B42318; --bad-bg:#FEF3F2; --ok:#2E7D52; --ok-bg:#ECFDF3; --warn:#B54708; --warn-bg:#FFFAEB;
+  --radius:14px; --shadow:0 2px 8px rgba(26,60,52,.08);
+  --heading:#1A3C34; --soft:var(--soft); --ded-bg:#EEF2FF; --ded:#3538CD; --nd-bg:#F2F4F7; --nd:#475467; --hdr-ink:#FFFFFF; --hdr-sub:#C8E6C9; --credit:#5B8DEF;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F1A17; --card:#16241F; --ink:#E4ECE7; --muted:#97A8A0; --line:#2A3B35; --heading:#B8E2C8;
+  --edit:#1A2A45; --edit-line:#34508A; --edit-ink:#C9D9FF; --soft:#1B2B26;
+  --bad:#F97066; --bad-bg:#3A1B18; --ok:#6BD39A; --ok-bg:#16352A; --warn:#FDB022; --warn-bg:#3A2A10;
+  --ded-bg:#232A55; --ded:#B4BCFF; --nd-bg:#25302C; --nd:#B5C2BC; --green-light:#4FA977; --credit:#7FA6F5; --shadow:0 2px 8px rgba(0,0,0,.35); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F1A17; --card:#16241F; --ink:#E4ECE7; --muted:#97A8A0; --line:#2A3B35; --heading:#B8E2C8;
+  --edit:#1A2A45; --edit-line:#34508A; --edit-ink:#C9D9FF; --soft:#1B2B26;
+  --bad:#F97066; --bad-bg:#3A1B18; --ok:#6BD39A; --ok-bg:#16352A; --warn:#FDB022; --warn-bg:#3A2A10;
+  --ded-bg:#232A55; --ded:#B4BCFF; --nd-bg:#25302C; --nd:#B5C2BC; --green-light:#4FA977; --credit:#7FA6F5; --shadow:0 2px 8px rgba(0,0,0,.35); color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Open Sans',system-ui,sans-serif;font-size:14px;line-height:1.45}
+h1,h2,h3{font-family:'Montserrat',system-ui,sans-serif;color:var(--heading);margin:0}
+h1{font-size:22px} h2{font-size:17px} h3{font-size:14px;margin:18px 0 8px}
+.wrap{max-width:1320px;margin:0 auto;padding-block:16px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+header.top{background:var(--green-deep);color:var(--hdr-ink)}
+header.top .wrap{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+header.top h1{color:var(--hdr-ink)}
+header.top p{margin:2px 0 0;color:var(--hdr-sub);font-size:13px}
+.actions{display:flex;flex-wrap:wrap;gap:8px}
+button,.btn{font:600 13px 'Open Sans',sans-serif;border:1px solid var(--line);background:var(--card);color:var(--heading);border-radius:8px;padding:7px 12px;cursor:pointer}
+button:hover{border-color:var(--green-action)}
+header.top button{background:transparent;color:var(--hdr-ink);border-color:rgba(255,255,255,.35)}
+header.top button:hover{border-color:var(--hdr-ink)}
+button.add{border-style:dashed;margin-top:8px}
+button.del{border:none;background:none;color:var(--muted);font-size:16px;padding:2px 6px}
+button.del:hover{color:var(--bad)}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:16px}
+.card-head{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;justify-content:space-between;margin-bottom:10px}
+.hint{color:var(--muted);font-size:12.5px;margin:4px 0 0}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}
+.cols2{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(420px,1fr))}
+.cols2>*{min-width:0}
+.stack{display:grid;gap:16px}.stack>*{min-width:0}
+td input.num{min-width:110px}
+@media (max-width:520px){.cols2{grid-template-columns:1fr}}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted);font-weight:600}
+input,select{font:14px 'Open Sans',sans-serif;color:var(--edit-ink);background:var(--edit);border:1px solid var(--edit-line);border-radius:7px;padding:6px 8px;width:100%;min-width:0}
+input:focus,select:focus{outline:2px solid var(--green-light);outline-offset:0;background:var(--card)}
+input[type=checkbox]{width:18px;height:18px;accent-color:var(--green-action)}
+input.num{text-align:right}
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+th{background:var(--soft);color:var(--heading);font:700 11.5px 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.02em;text-align:left;white-space:nowrap}
+th.r,td.r{text-align:right}
+td.c,th.c{text-align:center}
+td.out{white-space:nowrap;text-align:right;font-variant-numeric:tabular-nums}
+tr.tot td{font-weight:700;background:var(--soft)}
+tbody tr:last-child td{border-bottom:none}
+td input{min-width:70px}
+td select{min-width:96px}
+td input.name{min-width:170px}
+th.grp{text-align:center;border-left:2px solid var(--line)}
+td.gl,th.gl{border-left:2px solid var(--line)}
+.kpis{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));margin-bottom:16px}
+.kpi{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:12px 14px;border-left:4px solid var(--green-light)}
+.kpi.credit{border-left-color:var(--credit)}
+.kpi.real{border-left-color:var(--heading)}
+.kpi .l{font-size:11.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.02em}
+.kpi .v{font:800 20px 'Montserrat',sans-serif;color:var(--heading);margin-top:2px;font-variant-numeric:tabular-nums}
+.kpi .s{font-size:12px;color:var(--muted)}
+.pill{display:inline-block;border-radius:999px;padding:1px 8px;font-size:11.5px;font-weight:600;white-space:nowrap}
+.pill.ok{background:var(--ok-bg);color:var(--ok)}
+.pill.bad{background:var(--bad-bg);color:var(--bad)}
+.pill.ded{background:var(--ded-bg);color:var(--ded)}
+.pill.nd{background:var(--nd-bg);color:var(--nd)}
+.price{font:700 14px 'Montserrat',sans-serif;color:var(--heading)}
+.sub{display:block;font-size:11.5px;color:var(--muted);font-weight:400;font-family:'Open Sans',sans-serif}
+.alert{background:var(--warn-bg);color:var(--warn);border-radius:8px;padding:8px 12px;font-size:13px;margin-top:10px}
+.alert:empty{display:none}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);align-items:center}
+.legend .sw{display:inline-block;width:14px;height:14px;border-radius:4px;background:var(--edit);border:1px solid var(--edit-line);vertical-align:middle;margin-right:4px}
+details summary{cursor:pointer;font-weight:600;color:var(--heading);margin-top:6px}
+.formula{font-size:12.5px;color:var(--muted);background:var(--soft);border-radius:8px;padding:10px 12px;margin-top:10px}
+.formula b{color:var(--heading)}
+
+.sync{align-self:center;font-size:12px;color:var(--hdr-sub)}
+.pedbar{border-left:4px solid var(--green-action)}
+.ped-row{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+.ped-row>*{min-width:0}
+.ped-sel{flex:1 1 240px}.ped-name{flex:1 1 240px}
+.ped-btns{display:flex;flex-wrap:wrap;gap:8px}
+button:disabled{opacity:.45;cursor:not-allowed}
+main.loading{opacity:.55}
+.confirm{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--warn-bg);color:var(--warn);border-radius:8px;padding:8px 12px;margin-bottom:12px;font-size:13px}
+.confirm button{padding:5px 10px}
+#exportBox textarea{width:100%;min-height:140px;font:12px ui-monospace,Menlo,monospace;background:var(--soft);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px}
+input[readonly]{background:var(--soft)!important;border-color:var(--line)!important;color:var(--ink)!important}
+</style>
+<style>[hidden]{display:none!important}</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div>
+      <h1>Costos de importación y precios de venta</h1>
+      <p>High Duo · Costo real (sin impuestos deducibles) → precio Mercado Libre y Tienda Nube</p>
+    </div>
+    <div class="actions"><span id="syncState" class="sync" hidden></span>
+      <button id="btnExport" type="button">Exportar pedido</button>
+      <button id="btnImport" type="button">Importar pedido</button>
+      <input id="fileImport" type="file" accept="application/json,.json" hidden />
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="card pedbar" id="pedidoBar">
+    <div class="ped-row">
+      <label class="f ped-sel">Pedido<select id="pedSel"><option>Cargando…</option></select></label>
+      <label class="f ped-name">Nombre del pedido<input id="pedNombre" type="text" autocomplete="off"></label>
+      <div class="ped-btns">
+        <button type="button" id="pedNuevo">+ Nuevo pedido</button>
+        <button type="button" id="pedDup">Duplicar</button>
+        <button type="button" id="pedDel">Eliminar</button>
+      </div>
+    </div>
+    <p class="hint" id="pedInfo"></p>
+    <div class="confirm" id="delBox" hidden><span>¿Eliminar el pedido «<b id="delName"></b>»? No se puede deshacer.</span>
+      <button type="button" id="delYes">Sí, eliminar</button><button type="button" id="delNo">Cancelar</button></div>
+  </section>
+  <section class="card" id="exportBox" hidden>
+    <div class="card-head"><h2>Exportar pedido</h2><button type="button" id="exportClose">Cerrar</button></div>
+    <p class="hint" id="exportMsg"></p>
+    <textarea id="exportText" readonly></textarea>
+  </section>
+  <div class="legend" style="margin-bottom:12px">
+    <span><span class="sw"></span>Celdas en azul = editables (se guardan solas)</span>
+  </div>
+
+  <!-- ========== PARÁMETROS GENERALES ========== -->
+  <section class="card">
+    <div class="card-head"><h2>1 · Parámetros generales</h2></div>
+    <div class="grid">
+      <label class="f">Cotización dólar (ARS por USD)<input class="num" data-k="tc" type="number" step="any" min="0"></label>
+      <label class="f">Rentabilidad objetivo (%)<input class="num" data-k="margen" type="number" step="any"></label>
+      <label class="f">IVA en precio de venta (%)<input class="num" data-k="iva" type="number" step="any"></label>
+      <label class="f">IIBB en precio de venta (%)<input class="num" data-k="iibb" type="number" step="any"></label>
+      <label class="f">Redondear precios hacia arriba a
+        <select data-k="redondeo">
+          <option value="1">Sin redondeo</option>
+          <option value="10">$10</option>
+          <option value="100">$100</option>
+          <option value="500">$500</option>
+          <option value="1000">$1.000</option>
+        </select>
+      </label>
+    </div>
+    <p class="hint">La rentabilidad se mide sobre el precio neto (precio final sin IVA ni IIBB). Precio final = precio neto × (1 + IVA + IIBB).</p>
+  </section>
+
+  <!-- ========== IMPORTACIÓN ========== -->
+  <section class="card">
+    <div class="card-head">
+      <h2>2 · Importación</h2>
+      <span class="hint">Cargá el presupuesto del despachante / importadora</span>
+    </div>
+
+    <h3>Productos del lote (FOB)</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr>
+          <th>Producto</th><th class="r">Cantidad</th><th class="r">FOB unit. USD</th>
+          <th class="r">CBM (m³) total línea</th><th class="r">Peso unit. kg (envío ML)</th>
+          <th class="r">FOB línea USD</th><th class="r">% valor</th><th class="r">% CBM</th><th></th>
+        </tr></thead>
+        <tbody id="tbProductos"></tbody>
+        <tfoot><tr class="tot"><td>Total</td><td class="out" id="totQty"></td><td></td><td class="out" id="totCbm"></td><td></td><td class="out" id="totFob"></td><td></td><td></td><td></td></tr></tfoot>
+      </table>
+    </div>
+    <button class="add" type="button" data-add="productos">+ Agregar producto</button>
+
+    <div class="stack" style="margin-top:8px">
+      <div>
+        <h3>Gastos (logística, despacho, bancarios, locales)</h3>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Concepto</th><th>Moneda</th><th class="r">Monto</th><th class="c">Deducible</th><th class="r">USD</th><th></th></tr></thead>
+            <tbody id="tbGastos"></tbody>
+            <tfoot><tr class="tot"><td colspan="4">Subtotal gastos</td><td class="out" id="totGastos"></td><td></td></tr></tfoot>
+          </table>
+        </div>
+        <button class="add" type="button" data-add="gastos">+ Agregar gasto</button>
+        <p class="hint">Los gastos en ARS se convierten a USD con la cotización. Marcá "deducible" si te facturan IVA recuperable aparte (ej. IVA de honorarios).</p>
+      </div>
+
+      <div>
+        <h3>Aranceles e impuestos</h3>
+        <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(140px,1fr));margin-bottom:10px">
+          <label class="f">Total impuestos del presupuesto USD<input class="num" data-k="impObjetivo" type="number" step="any" min="0" placeholder="opcional"></label>
+          <label class="f">Flete declarado USD<input class="num" data-k="fleteDecl" type="number" step="any" min="0"></label>
+          <label class="f">Seguro declarado USD<input class="num" data-k="seguroDecl" type="number" step="any" min="0"></label>
+          <label class="f">Valor en aduana (CIF)<input class="num" id="cifOut" type="text" readonly tabindex="-1"></label>
+          <label class="f">Base IVA (CIF + derechos)<input class="num" id="baseIvaOut" type="text" readonly tabindex="-1"></label>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Impuesto</th><th class="r">%</th><th class="r">o monto fijo USD</th><th>Base</th><th class="c">Deducible</th><th class="r">USD</th><th></th></tr></thead>
+            <tbody id="tbImpuestos"></tbody>
+            <tfoot><tr class="tot"><td colspan="5">Subtotal impuestos</td><td class="out" id="totImp"></td><td></td></tr></tfoot>
+          </table>
+        </div>
+        <button class="add" type="button" data-add="impuestos">+ Agregar impuesto</button>
+        <p class="hint" id="cifHint"></p><p class="hint">CIF = FOB + flete + seguro declarados. Si cargás el total de impuestos del presupuesto, el CIF se calcula solo para que el total coincida, con los mismos %. Los impuestos con base "CIF" (arancel, tasa) forman la Base IVA. Si cargás un monto fijo, reemplaza al %.</p>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ========== RESUMEN ========== -->
+  <div class="kpis" id="kpis"></div>
+
+  <!-- ========== COSTO POR PRODUCTO ========== -->
+  <section class="card">
+    <div class="card-head"><h2>3 · Costo real por producto</h2><span class="hint">Costo real = FOB + gastos + impuestos NO deducibles</span></div>
+    <div class="grid" style="margin-bottom:12px">
+      <label class="f" style="grid-column:1/-1;max-width:480px">Cómo repartir gastos e impuestos entre productos
+        <select data-k="metodo" id="metodoSel">
+          <option value="mixto">Mixto: gastos por volumen, impuestos por valor (recomendado)</option>
+          <option value="valor">Todo por valor FOB</option>
+          <option value="cbm">Todo por volumen (CBM)</option>
+        </select>
+      </label>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr>
+          <th>Producto</th><th class="r">Cant.</th><th class="r">FOB unit.</th><th class="r">Gastos unit.</th>
+          <th class="r">Imp. no deduc. unit.</th><th class="r">Costo real unit. USD</th><th class="r">Costo real unit. ARS</th>
+          <th class="r">Crédito fiscal unit. ARS</th><th class="r">Desembolso unit. ARS</th><th class="r">Costo real total ARS</th>
+        </tr></thead>
+        <tbody id="tbCostos"></tbody>
+        <tfoot id="tfCostos"></tfoot>
+      </table>
+    </div>
+    <p class="hint">Crédito fiscal = IVA, IVA adicional y Ganancias pagados en aduana (o los que marques deducibles): se recuperan, no son costo. Desembolso = lo que sale de caja por unidad (costo real + crédito fiscal).</p>
+  </section>
+
+  <!-- ========== CANALES ========== -->
+  <div class="cols2">
+    <section class="card">
+      <div class="card-head"><h2>4 · Mercado Libre</h2></div>
+      <div class="grid">
+        <label class="f">Comisión ML (%)<input class="num" data-k="ml.com" type="number" step="any"></label>
+        <label class="f">Umbral envío gratis ($)<input class="num" data-k="ml.umbral" type="number" step="any"></label>
+        <label class="f">Envío tramo alto desde ($)<input class="num" data-k="ml.umbralAlto" type="number" step="any"></label>
+        <label class="f">Otro costo por venta ($)<input class="num" data-k="ml.extra" type="number" step="any"></label>
+      </div>
+
+      <h3>Costo por unidad vendida (precio final menor al umbral)</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th class="r">Precio final hasta $</th><th class="r">Cargo por unidad $</th><th></th></tr></thead>
+          <tbody id="tbTramos"></tbody>
+        </table>
+      </div>
+      <button class="add" type="button" data-add="tramos">+ Agregar tramo</button>
+
+      <h3>Costo de envío por peso (precio final igual o mayor al umbral)</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th class="r">Peso desde kg</th><th class="r">Envío: umbral → tramo alto $</th><th class="r">Envío: tramo alto o más $</th><th></th></tr></thead>
+          <tbody id="tbEnvios"></tbody>
+        </table>
+      </div>
+      <button class="add" type="button" data-add="envios">+ Agregar peso</button>
+    </section>
+
+    <section class="card">
+      <div class="card-head"><h2>5 · Tienda Nube</h2></div>
+      <div class="grid">
+        <label class="f">Comisión Pago Nube (%)<input class="num" data-k="tn.comNube" type="number" step="any"></label>
+        <label class="f">Comisión transferencia (%)<input class="num" data-k="tn.comTransf" type="number" step="any"></label>
+        <label class="f">IVA sobre comisiones (%)<input class="num" data-k="tn.ivaCom" type="number" step="any"></label>
+        <label class="f">Descuento por transferencia (%)<input class="num" data-k="tn.desc" type="number" step="any"></label>
+        <label class="f">Otro costo por venta ($)<input class="num" data-k="tn.extra" type="number" step="any"></label>
+      </div>
+      <div class="formula">
+        <b>Precio de lista</b> = el mayor entre (a) el precio que deja la rentabilidad objetivo cobrando con Pago Nube y (b) el que la deja cobrando por transferencia después del descuento.
+        <br><b>Precio transferencia</b> = Precio de lista × (1 − descuento). Así ganás al menos el objetivo con cualquier medio de pago.
+        <br>Poné 0% en "IVA sobre comisiones" si tomás ese IVA como crédito fiscal.
+      </div>
+    </section>
+  </div>
+
+  <!-- ========== PRECIOS ========== -->
+  <section class="card">
+    <div class="card-head">
+      <h2>6 · Precios de venta sugeridos</h2>
+      <span class="hint">Precios finales con IVA e IIBB incluidos. Escribí un precio propio para ver su margen real.</span>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th rowspan="2">Producto</th><th rowspan="2" class="r">Costo real unit.</th>
+            <th colspan="5" class="grp">Mercado Libre</th>
+            <th colspan="3" class="grp">Tienda Nube — lista</th>
+            <th colspan="2" class="grp">Tienda Nube — transferencia</th>
+          </tr>
+          <tr>
+            <th class="r gl">Sugerido</th><th class="r">Tu precio</th><th class="r">Cargo ML</th><th class="r">Ganancia</th><th class="r">Margen</th>
+            <th class="r gl">Sugerido</th><th class="r">Tu precio</th><th class="r">Margen</th>
+            <th class="r gl">Precio</th><th class="r">Margen</th>
+          </tr>
+        </thead>
+        <tbody id="tbPrecios"></tbody>
+      </table>
+    </div>
+    <div class="alert" id="alertas"></div>
+    <details>
+      <summary>¿Cómo se calcula?</summary>
+      <div class="formula">
+        <b>Mercado Libre:</b> Precio final = (Costo real + cargo ML + otro costo) × (1 + IVA + IIBB) ÷ (1 − Rentabilidad − Comisión ML × (1 + IVA + IIBB)).
+        El cargo ML es el <b>costo por unidad vendida</b> del tramo si el precio final queda por debajo del umbral, o el <b>costo de envío</b> según el peso si queda igual o por encima. Se elige el precio más bajo que cumple la rentabilidad y respeta el tramo.
+        <br><b>Tienda Nube:</b> misma lógica, con la comisión de Pago Nube o de transferencia (+ IVA s/ comisión) y sin cargo de envío.
+        <br><b>Margen</b> = (Precio neto − Costo real − comisión − cargos) ÷ Precio neto, donde Precio neto = Precio final ÷ (1 + IVA + IIBB).
+      </div>
+    </details>
+  </section>
+
+  <p class="hint" style="text-align:center;margin:20px 0 30px">Cada pedido se guarda solo mientras editás. "Exportar pedido" te da una copia en archivo.</p>
+</main>
+
+<script>
+(function(){
+'use strict';
+var uid = function(){ return Math.random().toString(36).slice(2,9); };
+
+function ejemplo(){
+  return {
+    tc:1530, margen:25, iva:21, iibb:3, redondeo:100, metodo:'mixto', impObjetivo:4004,
+    fleteDecl:1236, seguroDecl:80,
+    productos:[
+      {id:uid(), nombre:'Lote ejemplo (reemplazá por tus productos)', qty:1000, fob:3.917, cbm:13.2, peso:0.5, mlManual:'', tnManual:''}
+    ],
+    gastos:[
+      {id:uid(), concepto:'Gastos en origen',             moneda:'USD', monto:0,    base:'valor', deducible:false},
+      {id:uid(), concepto:'Servicio All In (flete + despacho)', moneda:'USD', monto:4542, base:'cbm', deducible:false},
+      {id:uid(), concepto:'Flete',                        moneda:'USD', monto:80,   base:'cbm',   deducible:false},
+      {id:uid(), concepto:'Gastos bancarios',             moneda:'USD', monto:0,    base:'valor', deducible:false},
+      {id:uid(), concepto:'Flete local',                  moneda:'ARS', monto:0,    base:'cbm',   deducible:false},
+      {id:uid(), concepto:'Custodia de carga',            moneda:'ARS', monto:0,    base:'valor', deducible:false},
+      {id:uid(), concepto:'Terceros organismos',          moneda:'ARS', monto:0,    base:'valor', deducible:false}
+    ],
+    impuestos:[
+      {id:uid(), concepto:'Arancel aduana (derecho de importación)', pct:18, base:'cif', deducible:false},
+      {id:uid(), concepto:'Tasa estadística', pct:3,  base:'cif', deducible:false},
+      {id:uid(), concepto:'IVA',              pct:21, base:'iva', deducible:true},
+      {id:uid(), concepto:'IVA adicional',    pct:20, base:'iva', deducible:true},
+      {id:uid(), concepto:'Ganancias',        pct:6,  base:'iva', deducible:true},
+      {id:uid(), concepto:'IIBB',             pct:3,  base:'iva', deducible:false},
+      {id:uid(), concepto:'Impuestos internos', pct:0, base:'iva', deducible:false}
+    ],
+    ml:{
+      com:14.2, umbral:33000, umbralAlto:50000, extra:0,
+      tramos:[{id:uid(),hasta:14999,cargo:1330},{id:uid(),hasta:23999,cargo:2740},{id:uid(),hasta:32999,cargo:3360}],
+      envios:[
+        {id:uid(),peso:0,medio:7428,alto:8148},{id:uid(),peso:0.3,medio:8148,alto:8748},{id:uid(),peso:0.5,medio:9348,alto:9948},
+        {id:uid(),peso:1,medio:9588,alto:10308},{id:uid(),peso:1.5,medio:9948,alto:10548},{id:uid(),peso:2,medio:10668,alto:11508},
+        {id:uid(),peso:3,medio:11748,alto:13068},{id:uid(),peso:4,medio:12948,alto:14268},{id:uid(),peso:5,medio:14148,alto:15708},
+        {id:uid(),peso:8,medio:15348,alto:17028},{id:uid(),peso:10,medio:16548,alto:18228}
+      ]
+    },
+    tn:{comNube:4.39, comTransf:1.5, ivaCom:21, desc:10, extra:0}
+  };
+}
+
+var S = ejemplo();
+var IN_CLAUDE = !!(window.claude && window.claude.use);
+var LEGACY = 'hd-costos-importacion-v1', LSKEY = 'hd-pedidos-v2', PREF = 'hd-pedido-actual';
+function lsGet(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+function lsSet(k,v){ try { localStorage.setItem(k,v); } catch(e){} }
+function ahora(){ return new Date().toISOString(); }
+function nuevoId(){ return 'p' + Date.now().toString(36) + uid(); }
+function setSync(t){ var el = document.getElementById('syncState'); if (el){ el.textContent = t; el.hidden = !t; } }
+function valido(st){ return !!(st && Array.isArray(st.productos) && st.ml && st.tn); }
+
+// Guardado local (cuando la página se abre fuera de Claude, por ejemplo desde el repo)
+var Local = {
+  nombre: 'este navegador',
+  _all: function(){
+    var o = null; try { o = JSON.parse(lsGet(LSKEY)); } catch(e){}
+    if (!o || typeof o !== 'object'){
+      o = {};
+      var leg = null; try { leg = JSON.parse(lsGet(LEGACY)); } catch(e){}
+      if (valido(leg)){ o[nuevoId()] = {nombre:'Mi pedido', json:JSON.stringify(leg), actualizado:ahora(), creado:ahora()}; lsSet(LSKEY, JSON.stringify(o)); }
+    }
+    return o;
+  },
+  list: function(){ var o = this._all(); return Promise.resolve(Object.keys(o).map(function(id){ return {id:id, nombre:o[id].nombre, creado:o[id].creado, actualizado:o[id].actualizado}; })); },
+  get: function(id){ var o = this._all(), st = null; try { st = o[id] ? JSON.parse(o[id].json) : null; } catch(e){} return Promise.resolve(st); },
+  save: function(id, meta, json){ var o = this._all(); o[id] = {nombre:meta.nombre, creado:meta.creado, actualizado:meta.actualizado, json:json}; lsSet(LSKEY, JSON.stringify(o)); return Promise.resolve(); },
+  remove: function(id){ var o = this._all(); delete o[id]; lsSet(LSKEY, JSON.stringify(o)); return Promise.resolve(); }
+};
+// Guardado en la cuenta (página publicada en Claude)
+function Remote(db){
+  var col = db.collection('pedidos');
+  return {
+    nombre: 'tu cuenta',
+    list: function(){ return col.get().then(function(q){ return q.docs.map(function(d){ var x = d.data() || {}; return {id:d.id, nombre:x.nombre, creado:x.creado, actualizado:x.actualizado}; }); }); },
+    get: function(id){ return col.doc(id).get().then(function(sn){ if (!sn.exists) return null; try { return JSON.parse(sn.data().json); } catch(e){ return null; } }); },
+    save: function(id, meta, json){ return col.doc(id).set({nombre:meta.nombre, creado:meta.creado, actualizado:meta.actualizado, json:json}); },
+    remove: function(id){ return col.doc(id).delete(); }
+  };
+}
+
+var STORE_ = null, LISTA = [], PED = null;
+var dirty = false, busy = null, tSave = null;
+function save(){
+  S._mod = ahora();
+  if (!PED) return;
+  dirty = true; setSync('Cambios sin guardar…');
+  clearTimeout(tSave); tSave = setTimeout(function(){ flush(); }, 1000);
+}
+function flush(){
+  if (busy) return busy.then(function(){ return dirty ? flush() : null; });
+  if (!dirty || !PED || !STORE_) return Promise.resolve();
+  dirty = false; clearTimeout(tSave);
+  var id = PED.id, meta = {nombre: PED.nombre || 'Sin nombre', creado: PED.creado || ahora(), actualizado: ahora()};
+  var json = JSON.stringify(S);
+  setSync('Guardando…');
+  busy = STORE_.save(id, meta, json).then(function(){
+    busy = null;
+    if (PED && PED.id === id) PED.actualizado = meta.actualizado;
+    LISTA.forEach(function(x){ if (x.id === id){ x.actualizado = meta.actualizado; x.nombre = meta.nombre; } });
+    setSync('Guardado en ' + STORE_.nombre);
+    if (dirty) return flush();
+  }, function(){
+    busy = null;
+    if (PED && PED.id === id){ dirty = true; setSync('No se pudo guardar, reintentando…'); tSave = setTimeout(function(){ flush(); }, 4000); }
+  });
+  return busy;
+}
+window.addEventListener('pagehide', function(){ if (dirty) flush(); });
+
+// ---------- helpers ----------
+var $ = function(id){ return document.getElementById(id); };
+function n(v){ var x = parseFloat(v); return isFinite(x) ? x : 0; }
+var fARS = new Intl.NumberFormat('es-AR',{maximumFractionDigits:0});
+var fUSD = new Intl.NumberFormat('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2});
+var fPct = new Intl.NumberFormat('es-AR',{minimumFractionDigits:1,maximumFractionDigits:1});
+var fNum = new Intl.NumberFormat('es-AR',{maximumFractionDigits:2});
+function ars(v){ return isFinite(v) ? '$ ' + fARS.format(v) : '—'; }
+function usd(v){ return isFinite(v) ? 'US$ ' + fUSD.format(v) : '—'; }
+function pct(v){ return isFinite(v) ? fPct.format(v*100) + '%' : '—'; }
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+function getPath(o,p){ return p.split('.').reduce(function(a,k){ return a==null?a:a[k]; }, o); }
+function setPath(o,p,v){ var ks=p.split('.'), last=ks.pop(); ks.reduce(function(a,k){return a[k];},o)[last]=v; }
+function ceilTo(x, step){ step = n(step) || 1; return Math.ceil(x/step - 1e-9)*step; }
+
+// ---------- render editable tables ----------
+function inp(list, id, field, val, opts){
+  opts = opts || {};
+  var t = opts.text ? 'text' : 'number';
+  return '<input '+(opts.text?'':'class="num" step="any" ')+'type="'+t+'" '+(opts.cls?'class="'+opts.cls+'" ':'')+
+    'data-list="'+list+'" data-id="'+id+'" data-f="'+field+'" value="'+esc(val)+'"'+(opts.ph?' placeholder="'+esc(opts.ph)+'"':'')+'>';
+}
+function sel(list, id, field, val, options){
+  return '<select data-list="'+list+'" data-id="'+id+'" data-f="'+field+'">' + options.map(function(o){
+    return '<option value="'+o[0]+'"'+(o[0]===val?' selected':'')+'>'+o[1]+'</option>'; }).join('') + '</select>';
+}
+function chk(list, id, field, val){
+  return '<input type="checkbox" data-list="'+list+'" data-id="'+id+'" data-f="'+field+'"'+(val?' checked':'')+'>';
+}
+function del(list, id){ return '<button class="del" type="button" title="Eliminar" data-del="'+list+'" data-id="'+id+'">✕</button>'; }
+
+function renderInputs(){
+  $('tbProductos').innerHTML = S.productos.map(function(p){
+    return '<tr>'+
+      '<td>'+inp('productos',p.id,'nombre',p.nombre,{text:true,cls:'name',ph:'Nombre'})+'</td>'+
+      '<td>'+inp('productos',p.id,'qty',p.qty)+'</td>'+
+      '<td>'+inp('productos',p.id,'fob',p.fob)+'</td>'+
+      '<td>'+inp('productos',p.id,'cbm',p.cbm)+'</td>'+
+      '<td>'+inp('productos',p.id,'peso',p.peso)+'</td>'+
+      '<td class="out" id="pf_'+p.id+'"></td><td class="out" id="pv_'+p.id+'"></td><td class="out" id="pc_'+p.id+'"></td>'+
+      '<td>'+del('productos',p.id)+'</td></tr>';
+  }).join('');
+
+  $('tbGastos').innerHTML = S.gastos.map(function(g){
+    return '<tr>'+
+      '<td>'+inp('gastos',g.id,'concepto',g.concepto,{text:true,cls:'name'})+'</td>'+
+      '<td>'+sel('gastos',g.id,'moneda',g.moneda,[['USD','USD'],['ARS','ARS']])+'</td>'+
+      '<td>'+inp('gastos',g.id,'monto',g.monto)+'</td>'+
+      '<td class="c">'+chk('gastos',g.id,'deducible',g.deducible)+'</td>'+
+      '<td class="out" id="gu_'+g.id+'"></td>'+
+      '<td>'+del('gastos',g.id)+'</td></tr>';
+  }).join('');
+
+  $('tbImpuestos').innerHTML = S.impuestos.map(function(t){
+    return '<tr>'+
+      '<td>'+inp('impuestos',t.id,'concepto',t.concepto,{text:true,cls:'name'})+'</td>'+
+      '<td style="width:90px">'+inp('impuestos',t.id,'pct',t.pct)+'</td>'+
+      '<td style="width:110px">'+inp('impuestos',t.id,'fijo',t.fijo,{ph:'—'})+'</td>'+
+      '<td>'+sel('impuestos',t.id,'base',t.base,[['cif','CIF'],['iva','Base IVA']])+'</td>'+
+      '<td class="c">'+chk('impuestos',t.id,'deducible',t.deducible)+'</td>'+
+      '<td class="out" id="iu_'+t.id+'"></td>'+
+      '<td>'+del('impuestos',t.id)+'</td></tr>';
+  }).join('');
+
+  $('tbTramos').innerHTML = S.ml.tramos.map(function(t){
+    return '<tr><td>'+inp('tramos',t.id,'hasta',t.hasta)+'</td><td>'+inp('tramos',t.id,'cargo',t.cargo)+'</td><td>'+del('tramos',t.id)+'</td></tr>';
+  }).join('');
+
+  $('tbEnvios').innerHTML = S.ml.envios.map(function(e){
+    return '<tr><td>'+inp('envios',e.id,'peso',e.peso)+'</td><td>'+inp('envios',e.id,'medio',e.medio)+'</td><td>'+inp('envios',e.id,'alto',e.alto)+'</td><td>'+del('envios',e.id)+'</td></tr>';
+  }).join('');
+
+  $('tbPrecios').innerHTML = S.productos.map(function(p){
+    return '<tr>'+
+      '<td id="rn_'+p.id+'"></td><td class="out" id="rc_'+p.id+'"></td>'+
+      '<td class="out gl" id="ms_'+p.id+'"></td>'+
+      '<td style="width:120px">'+inp('productos',p.id,'mlManual',p.mlManual,{ph:'opcional'})+'</td>'+
+      '<td class="out" id="mc_'+p.id+'"></td><td class="out" id="mg_'+p.id+'"></td><td class="out" id="mm_'+p.id+'"></td>'+
+      '<td class="out gl" id="ts_'+p.id+'"></td>'+
+      '<td style="width:120px">'+inp('productos',p.id,'tnManual',p.tnManual,{ph:'opcional'})+'</td>'+
+      '<td class="out" id="tm_'+p.id+'"></td>'+
+      '<td class="out gl" id="xs_'+p.id+'"></td><td class="out" id="xm_'+p.id+'"></td></tr>';
+  }).join('');
+
+  document.querySelectorAll('[data-k]').forEach(function(el){
+    var v = getPath(S, el.getAttribute('data-k'));
+    el.value = v == null ? '' : v;
+  });
+}
+
+function listRef(name){
+  if (name === 'tramos') return S.ml.tramos;
+  if (name === 'envios') return S.ml.envios;
+  return S[name];
+}
+
+// ---------- cálculo ----------
+function calcImport(){
+  var tc = n(S.tc);
+  var prods = S.productos.map(function(p){
+    return {p:p, qty:n(p.qty), fobLine:n(p.qty)*n(p.fob), cbm:n(p.cbm)};
+  });
+  var fobTot = prods.reduce(function(a,x){return a+x.fobLine;},0);
+  var cbmTot = prods.reduce(function(a,x){return a+x.cbm;},0);
+  prods.forEach(function(x){
+    x.shV = fobTot>0 ? x.fobLine/fobTot : 0;
+    x.shC = cbmTot>0 ? x.cbm/cbmTot : x.shV;   // sin CBM cargado, cae a valor
+  });
+
+  var gastos = S.gastos.map(function(g){
+    var u = g.moneda === 'ARS' ? (tc>0 ? n(g.monto)/tc : 0) : n(g.monto);
+    var base = S.metodo === 'valor' ? 'valor' : 'cbm';
+    return {g:g, usd:u, base:base};
+  });
+
+  var fijo = function(t){ return t.fijo !== '' && t.fijo != null && isFinite(parseFloat(t.fijo)); };
+  var cif = fobTot + n(S.fleteDecl) + n(S.seguroDecl), cifAjustado = false;
+  if (n(S.impObjetivo) > 0){
+    // total = CIF*sc + Fc + (CIF*(1+sc) + Fc)*si + Fi  ->  despejar CIF
+    var sc=0, si=0, Fc=0, Fi=0;
+    S.impuestos.forEach(function(t){
+      if (t.base === 'cif'){ if (fijo(t)) Fc += n(t.fijo); else sc += n(t.pct)/100; }
+      else { if (fijo(t)) Fi += n(t.fijo); else si += n(t.pct)/100; }
+    });
+    var den = sc + (1+sc)*si;
+    if (den > 0){ cif = (n(S.impObjetivo) - Fc - Fc*si - Fi)/den; cifAjustado = true; }
+  }
+  var derechos = 0;
+  var imps = S.impuestos.map(function(t){ return {t:t, usd:0}; });
+  imps.forEach(function(x){ if (x.t.base === 'cif'){ x.usd = fijo(x.t) ? n(x.t.fijo) : cif*n(x.t.pct)/100; derechos += x.usd; } });
+  var baseIva = cif + derechos;
+  imps.forEach(function(x){ if (x.t.base !== 'cif'){ x.usd = fijo(x.t) ? n(x.t.fijo) : baseIva*n(x.t.pct)/100; } });
+
+  var R = {cifAjustado:cifAjustado, tc:tc, fobTot:fobTot, cbmTot:cbmTot, cif:cif, baseIva:baseIva, gastos:gastos, imps:imps,
+    gastosTot:0, gastosDed:0, impTot:0, impDed:0};
+  gastos.forEach(function(x){ R.gastosTot += x.usd; if (x.g.deducible) R.gastosDed += x.usd; });
+  imps.forEach(function(x){ R.impTot += x.usd; if (x.t.deducible) R.impDed += x.usd; });
+
+  R.prods = prods.map(function(x){
+    var gND=0, gD=0, iND=0, iD=0;
+    gastos.forEach(function(gx){
+      var sh = gx.base === 'cbm' ? x.shC : x.shV;
+      if (gx.g.deducible) gD += gx.usd*sh; else gND += gx.usd*sh;
+    });
+    imps.forEach(function(ix){
+      var shI = S.metodo === 'cbm' ? x.shC : x.shV;
+      if (ix.t.deducible) iD += ix.usd*shI; else iND += ix.usd*shI;
+    });
+    var q = x.qty || 0;
+    var realLine = x.fobLine + gND + iND;
+    var credLine = gD + iD;
+    return Object.assign(x, {
+      gNDu: q? gND/q : 0, iNDu: q? iND/q : 0,
+      gastosU: q? (gND)/q : 0,
+      fobU: n(x.p.fob),
+      realU: q? realLine/q : 0, credU: q? credLine/q : 0,
+      realLine: realLine, credLine: credLine
+    });
+  });
+  R.realTot = R.prods.reduce(function(a,x){return a+x.realLine;},0);
+  R.credTot = R.gastosDed + R.impDed;
+  R.desembolso = fobTot + R.gastosTot + R.impTot;
+  return R;
+}
+
+function envioPorPeso(peso, alto){
+  var rows = S.ml.envios.slice().sort(function(a,b){return n(a.peso)-n(b.peso);});
+  if (!rows.length) return 0;
+  var r = rows[0];
+  rows.forEach(function(e){ if (n(peso) >= n(e.peso)) r = e; });
+  return n(alto ? r.alto : r.medio);
+}
+
+function mlEscenarios(peso){
+  var umbral = n(S.ml.umbral), alto = n(S.ml.umbralAlto) || Infinity;
+  var tramos = S.ml.tramos.slice().sort(function(a,b){return n(a.hasta)-n(b.hasta);});
+  var out = [], prev = 0;
+  tramos.forEach(function(t){
+    var max = Math.min(n(t.hasta), umbral - 0.01);
+    if (max >= prev) out.push({min:prev, max:max, cargo:n(t.cargo), tipo:'unidad'});
+    prev = n(t.hasta) + 0.01;
+  });
+  if (prev < umbral) out.push({min:prev, max:umbral-0.01, cargo:0, tipo:'unidad'}); // hueco sin tramo cargado
+  out.push({min:umbral, max:alto-0.01, cargo:envioPorPeso(peso,false), tipo:'envio'});
+  if (isFinite(alto)) out.push({min:alto, max:Infinity, cargo:envioPorPeso(peso,true), tipo:'envio'});
+  return out;
+}
+
+function margenML(precio, costo, peso, k){
+  var com = n(S.ml.com)/100;
+  var esc = mlEscenarios(peso).filter(function(e){ return precio >= e.min - 0.005 && precio <= e.max + 0.005; })[0];
+  var cargo = esc ? esc.cargo : 0;
+  var neto = precio / k;
+  var gan = neto - costo - n(S.ml.extra) - cargo - com*precio;
+  return {precio:precio, cargo:cargo, tipo:esc?esc.tipo:'', gan:gan, margen: neto>0 ? gan/neto : NaN};
+}
+
+function precioML(costo, peso, k, r){
+  var com = n(S.ml.com)/100, den = 1 - r - com*k;
+  if (den <= 0) return null;
+  var best = null;
+  mlEscenarios(peso).forEach(function(e){
+    var raw = (costo + n(S.ml.extra) + e.cargo) * k / den;
+    var p = ceilTo(Math.max(raw, e.min), S.redondeo);
+    if (p < e.min) p = ceilTo(e.min, S.redondeo);
+    if (p <= e.max + 0.005 && (!best || p < best)) best = p;
+  });
+  return best;
+}
+
+function comTN(which){ return n(which)/100 * (1 + n(S.tn.ivaCom)/100); }
+
+function margenTN(precio, costo, k, transf){
+  var c = transf ? comTN(S.tn.comTransf) : comTN(S.tn.comNube);
+  var neto = precio / k;
+  var gan = neto - costo - n(S.tn.extra) - c*precio;
+  return {precio:precio, gan:gan, margen: neto>0 ? gan/neto : NaN};
+}
+
+function precioTN(costo, k, r){
+  var d = n(S.tn.desc)/100;
+  var base = costo + n(S.tn.extra);
+  var den1 = 1 - r - comTN(S.tn.comNube)*k;
+  var den2 = (1 - d) * (1 - r - comTN(S.tn.comTransf)*k);
+  if (den1 <= 0 || den2 <= 0) return null;
+  return ceilTo(Math.max(base*k/den1, base*k/den2), S.redondeo);
+}
+
+function pillM(m, r){
+  if (!isFinite(m)) return '—';
+  return '<span class="pill '+(m >= r - 0.0005 ? 'ok' : 'bad')+'">'+pct(m)+'</span>';
+}
+
+function recalc(){
+  var R = calcImport();
+  var tc = R.tc;
+
+  R.prods.forEach(function(x){
+    var id = x.p.id;
+    $('pf_'+id).textContent = fUSD.format(x.fobLine);
+    $('pv_'+id).textContent = pct(x.shV);
+    $('pc_'+id).textContent = pct(x.shC);
+  });
+  $('totQty').textContent = fNum.format(R.prods.reduce(function(a,x){return a+x.qty;},0));
+  $('totCbm').textContent = fNum.format(R.cbmTot);
+  $('totFob').textContent = fUSD.format(R.fobTot);
+
+  R.gastos.forEach(function(x){ $('gu_'+x.g.id).textContent = fUSD.format(x.usd); });
+  $('totGastos').textContent = fUSD.format(R.gastosTot);
+  R.imps.forEach(function(x){ $('iu_'+x.t.id).textContent = fUSD.format(x.usd); });
+  $('totImp').textContent = fUSD.format(R.impTot);
+  $('cifOut').value = usd(R.cif);
+  $('baseIvaOut').value = usd(R.baseIva);
+  $('cifHint').textContent = R.cifAjustado
+    ? 'CIF calculado desde el total del presupuesto: ' + usd(R.cif) + '. Equivale a flete + seguro declarados de ' + usd(R.cif - R.fobTot) + ' sobre tu FOB de ' + usd(R.fobTot) + '. (Los campos de flete y seguro declarados no se usan.)'
+    : '';
+
+  var presupuesto = R.gastosTot + R.impTot;
+  $('kpis').innerHTML = [
+    ['FOB mercadería', usd(R.fobTot), ars(R.fobTot*tc), ''],
+    ['Presupuesto importación', usd(presupuesto), 'Gastos '+usd(R.gastosTot)+' · Imp. '+usd(R.impTot), ''],
+    ['Desembolso total', usd(R.desembolso), ars(R.desembolso*tc), ''],
+    ['Crédito fiscal recuperable', usd(R.credTot), ars(R.credTot*tc), 'credit'],
+    ['Costo real del lote', usd(R.realTot), ars(R.realTot*tc), 'real'],
+    ['Coeficiente de importación', R.fobTot>0 ? fNum.format(R.realTot/R.fobTot)+'×' : '—', 'Costo real ÷ FOB', 'real']
+  ].map(function(k){
+    return '<div class="kpi '+k[3]+'"><div class="l">'+k[0]+'</div><div class="v">'+k[1]+'</div><div class="s">'+k[2]+'</div></div>';
+  }).join('');
+
+  $('tbCostos').innerHTML = R.prods.map(function(x){
+    return '<tr><td>'+esc(x.p.nombre||'—')+'</td>'+
+      '<td class="out">'+fNum.format(x.qty)+'</td>'+
+      '<td class="out">'+usd(x.fobU)+'</td>'+
+      '<td class="out">'+usd(x.gNDu)+'</td>'+
+      '<td class="out">'+usd(x.iNDu)+'</td>'+
+      '<td class="out"><b>'+usd(x.realU)+'</b></td>'+
+      '<td class="out"><b>'+ars(x.realU*tc)+'</b></td>'+
+      '<td class="out">'+ars(x.credU*tc)+'</td>'+
+      '<td class="out">'+ars((x.realU+x.credU)*tc)+'</td>'+
+      '<td class="out">'+ars(x.realLine*tc)+'</td></tr>';
+  }).join('');
+  $('tfCostos').innerHTML = '<tr class="tot"><td colspan="9">Total lote</td><td class="out">'+ars(R.realTot*tc)+'</td></tr>';
+
+  var k = 1 + n(S.iva)/100 + n(S.iibb)/100;
+  var r = n(S.margen)/100;
+  var d = n(S.tn.desc)/100;
+  var alertas = [];
+
+  R.prods.forEach(function(x){
+    var id = x.p.id, costo = x.realU*tc, peso = n(x.p.peso);
+    $('rn_'+id).textContent = x.p.nombre || '—';
+    $('rc_'+id).textContent = ars(costo);
+
+    var sug = precioML(costo, peso, k, r);
+    var man = n(x.p.mlManual);
+    var pML = man > 0 ? man : sug;
+    $('ms_'+id).innerHTML = sug ? '<span class="price">'+ars(sug)+'</span>' : '—';
+    if (pML){
+      var m = margenML(pML, costo, peso, k);
+      $('mc_'+id).innerHTML = ars(m.cargo)+'<span class="sub">'+(m.tipo==='envio'?'envío ('+fNum.format(peso)+' kg)':'costo x unidad')+'</span>';
+      $('mg_'+id).textContent = ars(m.gan);
+      $('mm_'+id).innerHTML = pillM(m.margen, r);
+    } else { $('mc_'+id).textContent = $('mg_'+id).textContent = $('mm_'+id).textContent = '—'; }
+
+    var sugT = precioTN(costo, k, r);
+    var manT = n(x.p.tnManual);
+    var pTN = manT > 0 ? manT : sugT;
+    $('ts_'+id).innerHTML = sugT ? '<span class="price">'+ars(sugT)+'</span>' : '—';
+    if (pTN){
+      var mt = margenTN(pTN, costo, k, false);
+      var pX = pTN*(1-d);
+      var mx = margenTN(pX, costo, k, true);
+      $('tm_'+id).innerHTML = pillM(mt.margen, r)+'<span class="sub">gan. '+ars(mt.gan)+'</span>';
+      $('xs_'+id).innerHTML = '<span class="price">'+ars(pX)+'</span>';
+      $('xm_'+id).innerHTML = pillM(mx.margen, r)+'<span class="sub">gan. '+ars(mx.gan)+'</span>';
+    } else { $('tm_'+id).textContent = $('xs_'+id).textContent = $('xm_'+id).textContent = '—'; }
+  });
+
+  if (1 - r - n(S.ml.com)/100*k <= 0) alertas.push('Con esa rentabilidad y comisión, Mercado Libre no tiene precio posible: bajá la rentabilidad objetivo o revisá la comisión.');
+  if (1 - r - comTN(S.tn.comNube)*k <= 0) alertas.push('Con esa rentabilidad y comisión, Tienda Nube no tiene precio posible.');
+  if (!(tc > 0)) alertas.push('Cargá la cotización del dólar.');
+  if (R.prods.some(function(x){ return x.qty <= 0; })) alertas.push('Hay productos con cantidad 0: no se les puede calcular costo unitario.');
+  $('alertas').innerHTML = alertas.map(esc).join('<br>');
+}
+
+// ---------- eventos ----------
+document.addEventListener('input', onEdit);
+document.addEventListener('change', onEdit);
+function onEdit(e){
+  var el = e.target;
+  if (el.id === 'fileImport') return;
+  var val = el.type === 'checkbox' ? el.checked : el.value;
+  if (el.hasAttribute('data-k')){
+    var key = el.getAttribute('data-k');
+    setPath(S, key, (el.type === 'number' || key === 'redondeo') ? (val === '' ? '' : n(val)) : val);
+  } else if (el.hasAttribute('data-list')){
+    var list = listRef(el.getAttribute('data-list'));
+    var row = list.filter(function(r){ return r.id === el.getAttribute('data-id'); })[0];
+    if (!row) return;
+    var f = el.getAttribute('data-f');
+    row[f] = el.type === 'number' ? (val === '' ? '' : n(val)) : val;
+    // mantener sincronizado el input duplicado (precio manual vive en otra tabla)
+    if (f === 'nombre') { var rn = $('rn_'+row.id); if (rn) rn.textContent = val; }
+  } else return;
+  save(); recalc();
+}
+
+document.addEventListener('click', function(e){
+  var b = e.target.closest('button'); if (!b) return;
+  if (b.hasAttribute('data-del')){
+    var name = b.getAttribute('data-del'), list = listRef(name), id = b.getAttribute('data-id');
+    if (name === 'productos' && list.length <= 1) return;
+    var i = list.findIndex(function(r){ return r.id === id; });
+    if (i >= 0) list.splice(i,1);
+    save(); renderInputs(); recalc(); return;
+  }
+  if (b.hasAttribute('data-add')){
+    var add = b.getAttribute('data-add');
+    var nuevos = {
+      productos:{id:uid(), nombre:'', qty:0, fob:0, cbm:0, peso:0, mlManual:'', tnManual:''},
+      gastos:{id:uid(), concepto:'', moneda:'ARS', monto:0, deducible:false},
+      impuestos:{id:uid(), concepto:'', pct:0, fijo:'', base:'iva', deducible:false},
+      tramos:{id:uid(), hasta:0, cargo:0},
+      envios:{id:uid(), peso:0, medio:0, alto:0}
+    };
+    listRef(add).push(nuevos[add]);
+    save(); renderInputs(); recalc();
+    var tb = {productos:'tbProductos', gastos:'tbGastos', impuestos:'tbImpuestos', tramos:'tbTramos', envios:'tbEnvios'}[add];
+    var last = $(tb).lastElementChild;
+    var first = last && last.querySelector('input,select');
+    if (first) first.focus();
+  }
+});
+
+function nombreArchivo(){ return (PED && PED.nombre ? PED.nombre : 'pedido').replace(/[^\w\-áéíóúñÁÉÍÓÚÑ ]+/g,'').trim().replace(/\s+/g,'-') + '.json'; }
+$('btnExport').addEventListener('click', function(){
+  var txt = JSON.stringify(Object.assign({_nombre: PED ? PED.nombre : ''}, S), null, 2);
+  if (!IN_CLAUDE){
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([txt], {type:'application/json'}));
+    a.download = nombreArchivo(); document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1000);
+    return;
+  }
+  $('exportText').value = txt; $('exportBox').hidden = false;
+  var ok = 'Copiado al portapapeles. Pegalo en un archivo .json para guardarlo; después lo cargás con "Importar pedido".';
+  var fallback = function(){ $('exportMsg').textContent = 'Seleccioná el texto, copialo y guardalo en un archivo .json. Después lo cargás con "Importar pedido".'; $('exportText').focus(); $('exportText').select(); };
+  try { navigator.clipboard.writeText(txt).then(function(){ $('exportMsg').textContent = ok; }, fallback); } catch(e){ fallback(); }
+});
+$('exportClose').addEventListener('click', function(){ $('exportBox').hidden = true; });
+$('btnImport').addEventListener('click', function(){ $('fileImport').click(); });
+$('fileImport').addEventListener('change', function(e){
+  var file = e.target.files[0]; if (!file) return;
+  var rd = new FileReader();
+  rd.onload = function(){
+    var data = null;
+    try { data = JSON.parse(rd.result); } catch(err){}
+    if (!valido(data)){ $('alertas').textContent = 'El archivo importado no tiene el formato de un pedido.'; e.target.value = ''; return; }
+    var nombre = data._nombre || file.name.replace(/\.json$/i,'');
+    delete data._nombre;
+    crearPedido(nombre, data);
+    e.target.value = '';
+  };
+  rd.readAsText(file);
+});
+
+// ---------- pedidos ----------
+function porCreado(a,b){ return String(b.creado||'').localeCompare(String(a.creado||'')); }
+function renderPedidos(){
+  $('pedSel').innerHTML = LISTA.slice().sort(porCreado).map(function(x){
+    return '<option value="'+esc(x.id)+'"'+(PED && x.id === PED.id ? ' selected' : '')+'>'+esc(x.nombre || 'Sin nombre')+'</option>';
+  }).join('');
+  $('pedNombre').value = PED ? (PED.nombre || '') : '';
+  $('pedInfo').textContent = LISTA.length + (LISTA.length === 1 ? ' pedido guardado' : ' pedidos guardados') + ' en ' + (STORE_ ? STORE_.nombre : '…') +
+    (PED && PED.actualizado ? ' · última modificación ' + new Date(PED.actualizado).toLocaleString('es-AR', {dateStyle:'short', timeStyle:'short'}) : '');
+  $('pedDel').disabled = LISTA.length <= 1;
+}
+function abrirPedido(id){
+  return flush().then(function(){ return STORE_.get(id); }).then(function(st){
+    var meta = LISTA.filter(function(x){ return x.id === id; })[0] || {id:id};
+    S = valido(st) ? st : ejemplo();
+    PED = {id:id, nombre:meta.nombre, creado:meta.creado, actualizado:meta.actualizado};
+    lsSet(PREF, id);
+    $('delBox').hidden = true; $('alertas').textContent = '';
+    renderInputs(); recalc(); renderPedidos();
+    setSync('Guardado en ' + STORE_.nombre);
+  });
+}
+function crearPedido(nombre, st){
+  return flush().then(function(){
+    var id = nuevoId(), t = ahora();
+    return STORE_.save(id, {nombre:nombre, creado:t, actualizado:t}, JSON.stringify(st)).then(function(){
+      LISTA.push({id:id, nombre:nombre, creado:t, actualizado:t});
+      return abrirPedido(id);
+    });
+  }).catch(function(){ setSync('No se pudo crear el pedido'); });
+}
+function pedidoVacio(base){
+  var st = JSON.parse(JSON.stringify(base));
+  st.productos = [{id:uid(), nombre:'', qty:0, fob:0, cbm:0, peso:0, mlManual:'', tnManual:''}];
+  st.gastos.forEach(function(g){ g.monto = 0; });
+  st.impuestos.forEach(function(t){ t.fijo = ''; });
+  st.impObjetivo = ''; delete st._mod;
+  return st;
+}
+$('pedSel').addEventListener('change', function(e){ abrirPedido(e.target.value); });
+$('pedNombre').addEventListener('input', function(e){
+  if (!PED) return;
+  PED.nombre = e.target.value;
+  LISTA.forEach(function(x){ if (x.id === PED.id) x.nombre = PED.nombre; });
+  var opt = $('pedSel').querySelector('option[value="'+PED.id+'"]'); if (opt) opt.textContent = PED.nombre || 'Sin nombre';
+  save();
+});
+$('pedNuevo').addEventListener('click', function(){
+  var d = new Date();
+  crearPedido('Pedido ' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getFullYear()).slice(2), pedidoVacio(S));
+});
+$('pedDup').addEventListener('click', function(){
+  var st = JSON.parse(JSON.stringify(S)); delete st._mod;
+  crearPedido((PED && PED.nombre ? PED.nombre : 'Pedido') + ' (copia)', st);
+});
+$('pedDel').addEventListener('click', function(){
+  if (LISTA.length <= 1 || !PED) return;
+  $('delName').textContent = PED.nombre || 'Sin nombre'; $('delBox').hidden = false; $('delNo').focus();
+});
+$('delNo').addEventListener('click', function(){ $('delBox').hidden = true; });
+$('delYes').addEventListener('click', function(){
+  var id = PED.id; dirty = false; clearTimeout(tSave);
+  (busy || Promise.resolve()).then(function(){ return STORE_.remove(id); }).then(function(){
+    LISTA = LISTA.filter(function(x){ return x.id !== id; });
+    PED = null;
+    return abrirPedido(LISTA.slice().sort(porCreado)[0].id);
+  }).catch(function(){ setSync('No se pudo eliminar el pedido'); });
+});
+
+renderInputs(); recalc();
+document.querySelector('main').classList.add('loading');
+document.querySelector('main').inert = true;
+
+(async function iniciar(){
+  var db = null;
+  if (IN_CLAUDE){
+    try { db = await Promise.race([window.claude.use('db'), new Promise(function(r){ setTimeout(function(){ r(null); }, 10000); })]); } catch(e){ db = null; }
+  }
+  STORE_ = db ? Remote(db) : Local;
+  try { LISTA = await STORE_.list(); }
+  catch(e){ STORE_ = Local; LISTA = await Local.list(); }
+  if (!LISTA.length){
+    // Primer uso: traer los datos anteriores si existen; si no, un pedido de ejemplo.
+    var previo = null;
+    if (db){ try { var sn = await db.doc('lotes/actual').get(); if (sn.exists) previo = JSON.parse(sn.data().json); } catch(e){} }
+    if (!valido(previo)){ try { previo = JSON.parse(lsGet(LEGACY)); } catch(e){} }
+    var nombre = valido(previo) ? 'Mi pedido' : 'Pedido de ejemplo';
+    var st = valido(previo) ? previo : ejemplo();
+    var id = nuevoId(), t = ahora();
+    try { await STORE_.save(id, {nombre:nombre, creado:t, actualizado:t}, JSON.stringify(st)); } catch(e){}
+    LISTA = [{id:id, nombre:nombre, creado:t, actualizado:t}];
+  }
+  var pref = lsGet(PREF);
+  var elegido = LISTA.filter(function(x){ return x.id === pref; })[0] ||
+    LISTA.slice().sort(function(a,b){ return String(b.actualizado||'').localeCompare(String(a.actualizado||'')); })[0];
+  try { await abrirPedido(elegido.id); } catch(e){ setSync('No se pudo abrir el pedido'); }
+  document.querySelector('main').classList.remove('loading');
+  document.querySelector('main').inert = false;
+})();
+})();
+</script>
+</body>
+</html>
