@@ -8,46 +8,52 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet" />
 <style>
+/* Manual de Marca High Duo v2.0 — Verde Profundo, Verde Acción, Verde Claro, Verde Pálido, Blanco, Gris Oscuro */
 :root{
-  --green-deep:#1A3C34; --green-action:#2E7D52; --green-light:#6BBF8E; --green-pale:#C8E6C9;
-  --bg:#F4F7F4; --card:#FFFFFF; --ink:#2D2D2D; --muted:#6B7280; --line:#E3E8E4;
-  --edit:#EEF4FF; --edit-line:#B9CCF5; --edit-ink:#1D3F8F;
-  --bad:#B42318; --bad-bg:#FEF3F2; --ok:#2E7D52; --ok-bg:#ECFDF3; --warn:#B54708; --warn-bg:#FFFAEB;
+  --green-deep:#1A3C34;   /* principal: títulos, fondos oscuros, botones primarios */
+  --green-action:#2E7D52; /* énfasis: CTAs, precios, bordes destacados */
+  --green-light:#6BBF8E;  /* soporte: DUO, hover, badges */
+  --green-pale:#C8E6C9;   /* relleno: cards, tablas, fondos de sección */
+  --white:#FFFFFF; --ink:#2D2D2D;
+  --bg:#F2F8F3; --card:var(--white); --soft:#EAF5EC; --th:#DDEFE0; --line:#D3E7D6; --muted:#5D6D65;
+  --heading:var(--green-deep);
+  --edit:var(--white); --edit-line:#B5DDBF; --edit-ink:var(--ink);
+  --bad:#B42318; --bad-bg:#FEF1EF; --ok:var(--green-action); --ok-bg:#E2F3E6; --warn:#9A5B00; --warn-bg:#FFF6E0;
+  --ded-bg:var(--green-pale); --ded:var(--green-deep); --nd-bg:#EEF1EF; --nd:#4B5A53;
+  --hdr-ink:var(--white); --hdr-sub:var(--green-pale); --credit:var(--green-light);
   --radius:14px; --shadow:0 2px 8px rgba(26,60,52,.08);
-  --heading:#1A3C34; --soft:var(--soft); --ded-bg:#EEF2FF; --ded:#3538CD; --nd-bg:#F2F4F7; --nd:#475467; --hdr-ink:#FFFFFF; --hdr-sub:#C8E6C9; --credit:#5B8DEF;
+  color-scheme:light;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0F1A17; --card:#16241F; --ink:#E4ECE7; --muted:#97A8A0; --line:#2A3B35; --heading:#B8E2C8;
-  --edit:#1A2A45; --edit-line:#34508A; --edit-ink:#C9D9FF; --soft:#1B2B26;
-  --bad:#F97066; --bad-bg:#3A1B18; --ok:#6BD39A; --ok-bg:#16352A; --warn:#FDB022; --warn-bg:#3A2A10;
-  --ded-bg:#232A55; --ded:#B4BCFF; --nd-bg:#25302C; --nd:#B5C2BC; --green-light:#4FA977; --credit:#7FA6F5; --shadow:0 2px 8px rgba(0,0,0,.35); color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#0F1A17; --card:#16241F; --ink:#E4ECE7; --muted:#97A8A0; --line:#2A3B35; --heading:#B8E2C8;
-  --edit:#1A2A45; --edit-line:#34508A; --edit-ink:#C9D9FF; --soft:#1B2B26;
-  --bad:#F97066; --bad-bg:#3A1B18; --ok:#6BD39A; --ok-bg:#16352A; --warn:#FDB022; --warn-bg:#3A2A10;
-  --ded-bg:#232A55; --ded:#B4BCFF; --nd-bg:#25302C; --nd:#B5C2BC; --green-light:#4FA977; --credit:#7FA6F5; --shadow:0 2px 8px rgba(0,0,0,.35); color-scheme:dark}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:'Open Sans',system-ui,sans-serif;font-size:14px;line-height:1.45}
-h1,h2,h3{font-family:'Montserrat',system-ui,sans-serif;color:var(--heading);margin:0}
+h1,h2,h3{font-family:'Montserrat',system-ui,sans-serif;color:var(--heading);margin:0;text-wrap:balance}
+h1{font-weight:800} h2,h3{font-weight:700}
 h1{font-size:22px} h2{font-size:17px} h3{font-size:14px;margin:18px 0 8px}
 .wrap{max-width:1320px;margin:0 auto;padding-block:16px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
 header.top{background:var(--green-deep);color:var(--hdr-ink)}
 header.top .wrap{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
 header.top h1{color:var(--hdr-ink)}
-header.top p{margin:2px 0 0;color:var(--hdr-sub);font-size:13px}
+.brand{display:flex;align-items:center;gap:14px}
+.wordmark{font:800 22px/0.95 'Montserrat',sans-serif;letter-spacing:.02em;color:var(--white)}
+.wordmark b{display:block;font-weight:800;color:var(--green-light)}
+.brand-sep{width:1px;align-self:stretch;background:rgba(255,255,255,.25)}
+header.top h1{font-size:18px}
+header.top p{margin:2px 0 0;color:var(--hdr-sub);font-size:13px;font-weight:300}
 .actions{display:flex;flex-wrap:wrap;gap:8px}
-button,.btn{font:600 13px 'Open Sans',sans-serif;border:1px solid var(--line);background:var(--card);color:var(--heading);border-radius:8px;padding:7px 12px;cursor:pointer}
-button:hover{border-color:var(--green-action)}
-header.top button{background:transparent;color:var(--hdr-ink);border-color:rgba(255,255,255,.35)}
-header.top button:hover{border-color:var(--hdr-ink)}
+button,.btn{font:600 13px 'Montserrat',sans-serif;border:1px solid var(--green-action);background:var(--card);color:var(--green-action);border-radius:8px;padding:7px 12px;cursor:pointer;transition:background .15s,color .15s,border-color .15s}
+button:hover{background:var(--soft);border-color:var(--green-deep);color:var(--green-deep)}
+button:focus-visible{outline:2px solid var(--green-light);outline-offset:2px}
+header.top button{background:transparent;color:var(--hdr-ink);border-color:rgba(255,255,255,.4)}
+header.top button:hover{background:rgba(255,255,255,.1);border-color:var(--hdr-ink);color:var(--hdr-ink)}
 button.add{border-style:dashed;margin-top:8px}
 button.del{border:none;background:none;color:var(--muted);font-size:16px;padding:2px 6px}
+button.del:hover{background:none}
 button.del:hover{color:var(--bad)}
 .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:16px}
 .card-head{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;justify-content:space-between;margin-bottom:10px}
-.hint{color:var(--muted);font-size:12.5px;margin:4px 0 0}
+.hint{color:var(--muted);font-size:12.5px;margin:4px 0 0;font-weight:300}
 .grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}
 .cols2{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(420px,1fr))}
 .cols2>*{min-width:0}
@@ -56,25 +62,27 @@ td input.num{min-width:110px}
 @media (max-width:520px){.cols2{grid-template-columns:1fr}}
 label.f{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted);font-weight:600}
 input,select{font:14px 'Open Sans',sans-serif;color:var(--edit-ink);background:var(--edit);border:1px solid var(--edit-line);border-radius:7px;padding:6px 8px;width:100%;min-width:0}
-input:focus,select:focus{outline:2px solid var(--green-light);outline-offset:0;background:var(--card)}
+input:focus,select:focus{outline:2px solid var(--green-light);outline-offset:0;border-color:var(--green-action);background:var(--card)}
+input:hover,select:hover{border-color:var(--green-light)}
 input[type=checkbox]{width:18px;height:18px;accent-color:var(--green-action)}
 input.num{text-align:right}
 .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:10px}
 table{border-collapse:collapse;width:100%;font-size:13px}
 th,td{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
-th{background:var(--soft);color:var(--heading);font:700 11.5px 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.02em;text-align:left;white-space:nowrap}
+th{background:var(--th);color:var(--heading);font:700 11.5px 'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.02em;text-align:left;white-space:nowrap}
 th.r,td.r{text-align:right}
 td.c,th.c{text-align:center}
 td.out{white-space:nowrap;text-align:right;font-variant-numeric:tabular-nums}
 tr.tot td{font-weight:700;background:var(--soft)}
 tbody tr:last-child td{border-bottom:none}
+tbody tr:nth-child(even) td{background:#F7FBF8}
 td input{min-width:70px}
 td select{min-width:96px}
 td input.name{min-width:170px}
 th.grp{text-align:center;border-left:2px solid var(--line)}
 td.gl,th.gl{border-left:2px solid var(--line)}
 .kpis{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));margin-bottom:16px}
-.kpi{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:12px 14px;border-left:4px solid var(--green-light)}
+.kpi{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:12px 14px;border-left:4px solid var(--green-action)}
 .kpi.credit{border-left-color:var(--credit)}
 .kpi.real{border-left-color:var(--heading)}
 .kpi .l{font-size:11.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.02em}
@@ -85,7 +93,7 @@ td.gl,th.gl{border-left:2px solid var(--line)}
 .pill.bad{background:var(--bad-bg);color:var(--bad)}
 .pill.ded{background:var(--ded-bg);color:var(--ded)}
 .pill.nd{background:var(--nd-bg);color:var(--nd)}
-.price{font:700 14px 'Montserrat',sans-serif;color:var(--heading)}
+.price{font:700 14px 'Montserrat',sans-serif;color:var(--green-action)}
 .sub{display:block;font-size:11.5px;color:var(--muted);font-weight:400;font-family:'Open Sans',sans-serif}
 .alert{background:var(--warn-bg);color:var(--warn);border-radius:8px;padding:8px 12px;font-size:13px;margin-top:10px}
 .alert:empty{display:none}
@@ -115,7 +123,8 @@ input[readonly]{background:var(--soft)!important;border-color:var(--line)!import
 .login .row button{flex:1 1 140px}
 .login .msg{font-size:13px;min-height:1.2em;color:var(--muted)}
 .login .msg.err{color:var(--bad)}
-button.primary{background:var(--green-action);color:#fff;border-color:var(--green-action)}
+button.primary{background:var(--green-action);color:var(--white);border-color:var(--green-action)}
+button.primary:hover{background:var(--green-deep);color:var(--white);border-color:var(--green-deep)}
 .user-chip{align-self:center;font-size:12px;color:var(--hdr-sub)}
 </style>
 <script src="config.js"></script>
@@ -124,9 +133,13 @@ button.primary{background:var(--green-action);color:#fff;border-color:var(--gree
 <body>
 <header class="top">
   <div class="wrap">
-    <div>
+    <div class="brand">
+      <div class="wordmark" aria-label="High Duo">HIGH<b>DUO</b></div>
+      <span class="brand-sep" aria-hidden="true"></span>
+      <div>
       <h1>Costos de importación y precios de venta</h1>
-      <p>High Duo · Costo real (sin impuestos deducibles) → precio Mercado Libre y Tienda Nube</p>
+      <p>Costo real (sin impuestos deducibles) → precio Mercado Libre y Tienda Nube</p>
+      </div>
     </div>
     <div class="actions"><span id="syncState" class="sync" hidden></span><span id="userChip" class="user-chip" hidden></span><button id="btnLogout" type="button" hidden>Cerrar sesión</button>
       <button id="btnExport" type="button">Exportar pedido</button>
@@ -172,7 +185,7 @@ button.primary{background:var(--green-action);color:#fff;border-color:var(--gree
     <textarea id="exportText" readonly></textarea>
   </section>
   <div class="legend" style="margin-bottom:12px">
-    <span><span class="sw"></span>Celdas en azul = editables (se guardan solas)</span>
+    <span><span class="sw"></span>Los campos con borde verde son editables y se guardan solos</span>
   </div>
 
   <!-- ========== PARÁMETROS GENERALES ========== -->
