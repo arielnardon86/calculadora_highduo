@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <title>Costos de importación High Duo</title>
+<link rel="icon" type="image/png" href="assets/logo-highduo.png">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -22,7 +23,7 @@
   --edit:var(--white); --edit-line:#B5DDBF; --edit-ink:var(--ink);
   --bad:#B42318; --bad-bg:#FEF1EF; --ok:var(--green-action); --ok-bg:#E2F3E6; --warn:#9A5B00; --warn-bg:#FFF6E0;
   --ded-bg:var(--green-pale); --ded:var(--green-deep); --nd-bg:#EEF1EF; --nd:#4B5A53;
-  --hdr-ink:var(--white); --hdr-sub:var(--green-pale); --credit:var(--green-light);
+  --hdr-ink:var(--green-deep); --hdr-sub:var(--muted); --credit:var(--green-light);
   --radius:14px; --shadow:0 2px 8px rgba(26,60,52,.08);
   color-scheme:light;
 }
@@ -32,21 +33,20 @@ h1,h2,h3{font-family:'Montserrat',system-ui,sans-serif;color:var(--heading);marg
 h1{font-weight:800} h2,h3{font-weight:700}
 h1{font-size:22px} h2{font-size:17px} h3{font-size:14px;margin:18px 0 8px}
 .wrap{max-width:1320px;margin:0 auto;padding-block:16px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
-header.top{background:var(--green-deep);color:var(--hdr-ink)}
+header.top{background:var(--white);color:var(--hdr-ink);border-bottom:3px solid var(--green-pale)}
 header.top .wrap{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
 header.top h1{color:var(--hdr-ink)}
 .brand{display:flex;align-items:center;gap:14px}
-.wordmark{font:800 22px/0.95 'Montserrat',sans-serif;letter-spacing:.02em;color:var(--white)}
-.wordmark b{display:block;font-weight:800;color:var(--green-light)}
-.brand-sep{width:1px;align-self:stretch;background:rgba(255,255,255,.25)}
+.logo{height:48px;width:auto;display:block}
+.brand-sep{width:1px;align-self:stretch;background:var(--line)}
 header.top h1{font-size:18px}
 header.top p{margin:2px 0 0;color:var(--hdr-sub);font-size:13px;font-weight:300}
 .actions{display:flex;flex-wrap:wrap;gap:8px}
 button,.btn{font:600 13px 'Montserrat',sans-serif;border:1px solid var(--green-action);background:var(--card);color:var(--green-action);border-radius:8px;padding:7px 12px;cursor:pointer;transition:background .15s,color .15s,border-color .15s}
 button:hover{background:var(--soft);border-color:var(--green-deep);color:var(--green-deep)}
 button:focus-visible{outline:2px solid var(--green-light);outline-offset:2px}
-header.top button{background:transparent;color:var(--hdr-ink);border-color:rgba(255,255,255,.4)}
-header.top button:hover{background:rgba(255,255,255,.1);border-color:var(--hdr-ink);color:var(--hdr-ink)}
+header.top button{background:var(--white);color:var(--green-action);border-color:var(--green-action)}
+header.top button:hover{background:var(--soft);border-color:var(--green-deep);color:var(--green-deep)}
 button.add{border-style:dashed;margin-top:8px}
 button.del{border:none;background:none;color:var(--muted);font-size:16px;padding:2px 6px}
 button.del:hover{background:none}
@@ -134,7 +134,7 @@ button.primary:hover{background:var(--green-deep);color:var(--white);border-colo
 <header class="top">
   <div class="wrap">
     <div class="brand">
-      <div class="wordmark" aria-label="High Duo">HIGH<b>DUO</b></div>
+      <img class="logo" src="assets/logo-highduo.png" alt="High Duo" width="230" height="96">
       <span class="brand-sep" aria-hidden="true"></span>
       <div>
       <h1>Costos de importación y precios de venta</h1>
