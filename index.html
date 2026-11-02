@@ -342,7 +342,7 @@ button.primary:hover{background:var(--green-deep);color:var(--white);border-colo
       <div class="formula">
         <b>Precio de lista</b> = el mayor entre (a) el precio que deja la rentabilidad objetivo cobrando con Pago Nube y (b) el que la deja cobrando por transferencia después del descuento.
         <br><b>Precio transferencia</b> = Precio de lista × (1 − descuento). Así ganás al menos el objetivo con cualquier medio de pago.
-        <br>Poné 0% en "IVA sobre comisiones" si tomás ese IVA como crédito fiscal.
+        <br>El IVA de la comisión no se cuenta como costo porque lo recuperás como crédito fiscal (ver "Impuestos a pagar").
       </div>
     </section>
 
@@ -399,9 +399,9 @@ button.primary:hover{background:var(--green-deep);color:var(--white);border-colo
     <details>
       <summary>¿Cómo se calcula?</summary>
       <div class="formula">
-        <b>Mercado Libre:</b> Precio final = (Costo real + cargo ML + otro costo) × (1 + IVA + IIBB) ÷ (1 − Rentabilidad − Comisión ML × (1 + IVA + IIBB)).
+        <b>Mercado Libre:</b> Precio final = (Costo real + cargo ML sin IVA + otro costo) × (1 + IVA + IIBB) ÷ (1 − Rentabilidad − Comisión ML sin IVA × (1 + IVA + IIBB)). La comisión y los cargos de ML se toman sin su IVA porque ese IVA lo recuperás.
         El cargo ML es el <b>costo por unidad vendida</b> del tramo si el precio final queda por debajo del umbral, o el <b>costo de envío</b> según el peso si queda igual o por encima. Se elige el precio más bajo que cumple la rentabilidad y respeta el tramo.
-        <br><b>Tienda Nube:</b> misma lógica, con la comisión de Pago Nube o de transferencia (+ IVA s/ comisión) y sin cargo de envío.
+        <br><b>Tienda Nube:</b> misma lógica, con la comisión de Pago Nube o de transferencia (sin su IVA, que también recuperás) y sin cargo de envío.
         <br><b>Margen</b> = (Precio neto − Costo real − comisión − cargos) ÷ Precio neto, donde Precio neto = Precio final ÷ (1 + IVA + IIBB).
       </div>
     </details>
@@ -759,21 +759,24 @@ function mlEscenarios(peso){
   return out;
 }
 
+// La comisión y los cargos de ML traen IVA adentro; ese IVA se recupera como crédito fiscal,
+// así que para el margen se toman sin IVA.
+function netoIvaML(){ var v = (S.ml.ivaIncl === '' || S.ml.ivaIncl == null) ? 0.21 : n(S.ml.ivaIncl)/100; return 1/(1+v); }
 function margenML(precio, costo, peso, k){
-  var com = n(S.ml.com)/100;
+  var f = netoIvaML(), com = n(S.ml.com)/100 * f;
   var esc = mlEscenarios(peso).filter(function(e){ return precio >= e.min - 0.005 && precio <= e.max + 0.005; })[0];
   var cargo = esc ? esc.cargo : 0;
   var neto = precio / k;
-  var gan = neto - costo - n(S.ml.extra) - cargo - com*precio;
+  var gan = neto - costo - n(S.ml.extra) - cargo*f - com*precio;
   return {precio:precio, cargo:cargo, tipo:esc?esc.tipo:'', gan:gan, margen: neto>0 ? gan/neto : NaN};
 }
 
 function precioML(costo, peso, k, r){
-  var com = n(S.ml.com)/100, den = 1 - r - com*k;
+  var f = netoIvaML(), com = n(S.ml.com)/100 * f, den = 1 - r - com*k;
   if (den <= 0) return null;
   var best = null;
   mlEscenarios(peso).forEach(function(e){
-    var raw = (costo + n(S.ml.extra) + e.cargo) * k / den;
+    var raw = (costo + n(S.ml.extra) + e.cargo*f) * k / den;
     var p = ceilTo(Math.max(raw, e.min), S.redondeo);
     if (p < e.min) p = ceilTo(e.min, S.redondeo);
     if (p <= e.max + 0.005 && (!best || p < best)) best = p;
@@ -781,7 +784,8 @@ function precioML(costo, peso, k, r){
   return best;
 }
 
-function comTN(which){ return n(which)/100 * (1 + n(S.tn.ivaCom)/100); }
+// El IVA de la comisión de Tienda Nube se recupera como crédito fiscal: para el margen se toma la comisión sin IVA.
+function comTN(which){ return n(which)/100; }
 
 function margenTN(precio, costo, k, transf){
   var c = transf ? comTN(S.tn.comTransf) : comTN(S.tn.comNube);
