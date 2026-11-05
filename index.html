@@ -940,7 +940,7 @@ function recalc(){
     fila('Ventas totales (con IVA e IIBB)', ars(ventas)) +
     fila('Precio neto total (sin impuestos)', ars(neto)) +
     fila('IVA débito ('+fNum.format(n(S.iva))+'% sobre neto)', ars(ivaDeb)) +
-    fila('<span class="menos">− IVA crédito de importación (IVA + IVA adicional)</span>', '<span class="menos">− '+ars(ivaCred)+'</span>') +
+    fila('<span class="menos">− IVA crédito de importación (impuestos con IVA marcados deducibles)</span>', '<span class="menos">− '+ars(ivaCred)+'</span>') +
     fila('<span class="menos">− IVA de comisiones' + (canal === 'ml' ? ' y cargos de envío de Mercado Libre' : ' de Tienda Nube') + '</span>', '<span class="menos">− '+ars(ivaComCanal)+'</span>') +
     fila(ivaPagar >= 0 ? 'IVA a pagar' : 'Saldo a favor de IVA', ars(Math.abs(ivaPagar)), 'res') +
     fila('IIBB ('+fNum.format(n(S.iibb))+'% sobre neto)', ars(iibbVta)) +
