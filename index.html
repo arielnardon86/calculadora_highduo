@@ -62,7 +62,7 @@ button.del:hover{color:var(--bad)}
 #tbTax td{padding:8px 10px}#tbTax tr.res td{font-weight:700;background:var(--soft)}#tbTax tr.res td.out{color:var(--green-deep);font-size:14px}#tbTax .menos{color:var(--muted)}
 td input.num{min-width:110px}
 @media (max-width:520px){.cols2{grid-template-columns:1fr}}
-label.f{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted);font-weight:600}
+label.f{display:flex;flex-direction:column;justify-content:flex-end;gap:4px;font-size:12px;color:var(--muted);font-weight:600}
 input,select{font:14px 'Open Sans',sans-serif;color:var(--edit-ink);background:var(--edit);border:1px solid var(--edit-line);border-radius:7px;padding:6px 8px;width:100%;min-width:0}
 input:focus,select:focus{outline:2px solid var(--green-light);outline-offset:0;border-color:var(--green-action);background:var(--card)}
 input:hover,select:hover{border-color:var(--green-light)}
@@ -194,7 +194,9 @@ button.primary:hover{background:var(--green-deep);color:var(--white);border-colo
   <section class="card">
     <div class="card-head"><h2>1 · Parámetros generales</h2></div>
     <div class="grid">
-      <label class="f">Cotización dólar (ARS por USD)<input class="num" data-k="tc" type="number" step="any" min="0"></label>
+      <label class="f">Dólar actual (venta)<input class="num" data-k="tc" type="number" step="any" min="0"></label>
+      <label class="f">Dólar al pagar (costo)<input class="num" data-k="tcPago" type="number" step="any" min="0"></label>
+      <label class="f">Dólar de impuestos<input class="num" data-k="tcImp" type="number" step="any" min="0"></label>
       <label class="f">Rentabilidad objetivo (%)<input class="num" data-k="margen" type="number" step="any"></label>
       <label class="f">IVA en precio de venta (%)<input class="num" data-k="iva" type="number" step="any"></label>
       <label class="f">IIBB en precio de venta (%)<input class="num" data-k="iibb" type="number" step="any"></label>
@@ -208,6 +210,7 @@ button.primary:hover{background:var(--green-deep);color:var(--white);border-colo
         </select>
       </label>
     </div>
+    <p class="hint"><b>Dólar actual:</b> valúa el costo a reposición para calcular los precios de venta. <b>Dólar al pagar:</b> pasa a pesos el FOB y los gastos en USD (y a USD los gastos en ARS). <b>Dólar de impuestos:</b> pasa a pesos los aranceles e impuestos (y a USD los montos fijos en ARS).</p>
     <p class="hint">La rentabilidad se mide sobre el precio neto (precio final sin IVA ni IIBB). Precio final = precio neto × (1 + IVA + IIBB).</p>
   </section>
 
@@ -257,9 +260,9 @@ button.primary:hover{background:var(--green-deep);color:var(--white);border-colo
         </div>
         <div class="tbl-wrap">
           <table>
-            <thead><tr><th>Impuesto</th><th class="r">%</th><th class="r">o monto fijo USD</th><th class="r">o monto fijo ARS</th><th>Base</th><th class="c">Deducible</th><th class="r">USD</th><th></th></tr></thead>
+            <thead><tr><th>Impuesto</th><th class="r">%</th><th class="r">o monto fijo USD</th><th class="r">o monto fijo ARS</th><th>Base</th><th class="c">Deducible</th><th class="r">USD</th><th class="r">ARS</th><th></th></tr></thead>
             <tbody id="tbImpuestos"></tbody>
-            <tfoot><tr class="tot"><td colspan="6">Subtotal impuestos</td><td class="out" id="totImp"></td><td></td></tr></tfoot>
+            <tfoot><tr class="tot"><td colspan="6">Subtotal impuestos</td><td class="out" id="totImp"></td><td class="out" id="totImpArs"></td><td></td></tr></tfoot>
           </table>
         </div>
         <button class="add" type="button" data-add="impuestos">+ Agregar impuesto</button>
@@ -288,8 +291,8 @@ button.primary:hover{background:var(--green-deep);color:var(--white);border-colo
       <table>
         <thead><tr>
           <th>Producto</th><th class="r">Cant.</th><th class="r">FOB unit.</th><th class="r">Gastos unit.</th>
-          <th class="r">Imp. no deduc. unit.</th><th class="r">Costo real unit. USD</th><th class="r">Costo real unit. ARS</th>
-          <th class="r">Crédito fiscal unit. ARS</th><th class="r">Desembolso unit. ARS</th><th class="r">Costo real total ARS</th>
+          <th class="r">Imp. no deduc. unit.</th><th class="r">Costo real unit. USD</th><th class="r">Costo real unit. ARS (pagado)</th><th class="r">Costo unit. ARS (dólar actual)</th>
+          <th class="r">Crédito fiscal unit. ARS</th><th class="r">Desembolso unit. ARS</th><th class="r">Costo real total ARS (pagado)</th>
         </tr></thead>
         <tbody id="tbCostos"></tbody>
         <tfoot id="tfCostos"></tfoot>
@@ -381,7 +384,7 @@ button.primary:hover{background:var(--green-deep);color:var(--white);border-colo
       <table>
         <thead>
           <tr>
-            <th rowspan="2">Producto</th><th rowspan="2" class="r">Costo real unit.</th>
+            <th rowspan="2">Producto</th><th rowspan="2" class="r">Costo unit. (dólar actual)</th>
             <th colspan="5" class="grp">Mercado Libre</th>
             <th colspan="3" class="grp">Tienda Nube — lista</th>
             <th colspan="2" class="grp">Tienda Nube — transferencia</th>
@@ -417,7 +420,7 @@ var uid = function(){ return Math.random().toString(36).slice(2,9); };
 
 function ejemplo(){
   return {
-    tc:1530, margen:25, iva:21, iibb:3, redondeo:100, metodo:'mixto', impObjetivo:4004, proy:'ml', proyIibb:'no',
+    tc:1530, tcPago:1530, tcImp:1530, margen:25, iva:21, iibb:3, redondeo:100, metodo:'mixto', impObjetivo:4004, proy:'ml', proyIibb:'no',
     fleteDecl:1236, seguroDecl:80,
     productos:[
       {id:uid(), nombre:'Lote ejemplo (reemplazá por tus productos)', qty:1000, fob:3.917, cbm:13.2, peso:0.5, mlManual:'', tnManual:''}
@@ -629,7 +632,7 @@ function renderInputs(){
       '<td style="width:130px">'+inp('impuestos',t.id,'fijoArs',t.fijoArs,{ph:'—'})+'</td>'+
       '<td>'+sel('impuestos',t.id,'base',t.base,[['cif','CIF'],['iva','Base IVA']])+'</td>'+
       '<td class="c">'+chk('impuestos',t.id,'deducible',t.deducible)+'</td>'+
-      '<td class="out" id="iu_'+t.id+'"></td>'+
+      '<td class="out" id="iu_'+t.id+'"></td><td class="out" id="ia_'+t.id+'"></td>'+
       '<td>'+del('impuestos',t.id)+'</td></tr>';
   }).join('');
 
@@ -667,7 +670,10 @@ function listRef(name){
 
 // ---------- cálculo ----------
 function calcImport(){
-  var tc = n(S.tc);
+  var tcV = n(S.tc);                       // dólar actual (venta)
+  var tcP = n(S.tcPago) || tcV;            // dólar al pagar mercadería e importación
+  var tcI = n(S.tcImp) || tcP;             // dólar de liquidación de impuestos
+  var tc = tcP;
   var prods = S.productos.map(function(p){
     return {p:p, qty:n(p.qty), fobLine:n(p.qty)*n(p.fob), cbm:n(p.cbm)};
   });
@@ -681,11 +687,12 @@ function calcImport(){
   var gastos = S.gastos.map(function(g){
     var u = g.moneda === 'ARS' ? (tc>0 ? n(g.monto)/tc : 0) : n(g.monto);
     var base = S.metodo === 'valor' ? 'valor' : 'cbm';
-    return {g:g, usd:u, base:base};
+    var a = g.moneda === 'ARS' ? n(g.monto) : n(g.monto)*tcP;
+    return {g:g, usd:u, ars:a, base:base};
   });
 
   var lleno = function(v){ return v !== '' && v != null && isFinite(parseFloat(v)); };
-  var montoFijo = function(t){ if (lleno(t.fijo)) return n(t.fijo); if (lleno(t.fijoArs) && tc > 0) return n(t.fijoArs)/tc; return null; };
+  var montoFijo = function(t){ if (lleno(t.fijo)) return n(t.fijo); if (lleno(t.fijoArs) && tcI > 0) return n(t.fijoArs)/tcI; return null; };
   var fijo = function(t){ return montoFijo(t) !== null; };
   var cif = fobTot + n(S.fleteDecl) + n(S.seguroDecl), cifAjustado = false;
   if (n(S.impObjetivo) > 0){
@@ -704,20 +711,21 @@ function calcImport(){
   var baseIva = cif + derechos;
   imps.forEach(function(x){ if (x.t.base !== 'cif'){ x.usd = fijo(x.t) ? montoFijo(x.t) : baseIva*n(x.t.pct)/100; } });
 
-  var R = {cifAjustado:cifAjustado, tc:tc, fobTot:fobTot, cbmTot:cbmTot, cif:cif, baseIva:baseIva, gastos:gastos, imps:imps,
+  imps.forEach(function(x){ x.ars = x.usd * tcI; });
+  var R = {cifAjustado:cifAjustado, tc:tcV, tcV:tcV, tcP:tcP, tcI:tcI, fobTot:fobTot, cbmTot:cbmTot, cif:cif, baseIva:baseIva, gastos:gastos, imps:imps,
     gastosTot:0, gastosDed:0, impTot:0, impDed:0};
   gastos.forEach(function(x){ R.gastosTot += x.usd; if (x.g.deducible) R.gastosDed += x.usd; });
   imps.forEach(function(x){ R.impTot += x.usd; if (x.t.deducible) R.impDed += x.usd; });
 
   R.prods = prods.map(function(x){
-    var gND=0, gD=0, iND=0, iD=0;
+    var gND=0, gD=0, iND=0, iD=0, aND=x.fobLine*tcP, aD=0;
     gastos.forEach(function(gx){
       var sh = gx.base === 'cbm' ? x.shC : x.shV;
-      if (gx.g.deducible) gD += gx.usd*sh; else gND += gx.usd*sh;
+      if (gx.g.deducible){ gD += gx.usd*sh; aD += gx.ars*sh; } else { gND += gx.usd*sh; aND += gx.ars*sh; }
     });
     imps.forEach(function(ix){
       var shI = S.metodo === 'cbm' ? x.shC : x.shV;
-      if (ix.t.deducible) iD += ix.usd*shI; else iND += ix.usd*shI;
+      if (ix.t.deducible){ iD += ix.usd*shI; aD += ix.ars*shI; } else { iND += ix.usd*shI; aND += ix.ars*shI; }
     });
     var q = x.qty || 0;
     var realLine = x.fobLine + gND + iND;
@@ -727,12 +735,19 @@ function calcImport(){
       gastosU: q? (gND)/q : 0,
       fobU: n(x.p.fob),
       realU: q? realLine/q : 0, credU: q? credLine/q : 0,
-      realLine: realLine, credLine: credLine
+      realLine: realLine, credLine: credLine,
+      realArsLine: aND, credArsLine: aD, realArsU: q? aND/q : 0, credArsU: q? aD/q : 0
     });
   });
   R.realTot = R.prods.reduce(function(a,x){return a+x.realLine;},0);
   R.credTot = R.gastosDed + R.impDed;
   R.desembolso = fobTot + R.gastosTot + R.impTot;
+  R.fobArs = fobTot*tcP;
+  R.gastosArs = gastos.reduce(function(a,x){ return a+x.ars; },0);
+  R.impArs = imps.reduce(function(a,x){ return a+x.ars; },0);
+  R.desembolsoArs = R.fobArs + R.gastosArs + R.impArs;
+  R.credArs = gastos.reduce(function(a,x){ return a+(x.g.deducible?x.ars:0); },0) + imps.reduce(function(a,x){ return a+(x.t.deducible?x.ars:0); },0);
+  R.realArs = R.prods.reduce(function(a,x){ return a+x.realArsLine; },0);
   return R;
 }
 
@@ -824,8 +839,9 @@ function recalc(){
 
   R.gastos.forEach(function(x){ $('gu_'+x.g.id).textContent = fUSD.format(x.usd); });
   $('totGastos').textContent = fUSD.format(R.gastosTot);
-  R.imps.forEach(function(x){ $('iu_'+x.t.id).textContent = fUSD.format(x.usd); });
+  R.imps.forEach(function(x){ $('iu_'+x.t.id).textContent = fUSD.format(x.usd); $('ia_'+x.t.id).textContent = ars(x.ars); });
   $('totImp').textContent = fUSD.format(R.impTot);
+  $('totImpArs').textContent = ars(R.impArs);
   $('cifOut').value = usd(R.cif);
   $('baseIvaOut').value = usd(R.baseIva);
   $('cifHint').textContent = R.cifAjustado
@@ -834,11 +850,11 @@ function recalc(){
 
   var presupuesto = R.gastosTot + R.impTot;
   $('kpis').innerHTML = [
-    ['FOB mercadería', usd(R.fobTot), ars(R.fobTot*tc), ''],
+    ['FOB mercadería', usd(R.fobTot), ars(R.fobArs), ''],
     ['Presupuesto importación', usd(presupuesto), 'Gastos '+usd(R.gastosTot)+' · Imp. '+usd(R.impTot), ''],
-    ['Desembolso total', usd(R.desembolso), ars(R.desembolso*tc), ''],
-    ['Crédito fiscal recuperable', usd(R.credTot), ars(R.credTot*tc), 'credit'],
-    ['Costo real del lote', usd(R.realTot), ars(R.realTot*tc), 'real'],
+    ['Desembolso total', usd(R.desembolso), ars(R.desembolsoArs) + ' pagados', ''],
+    ['Crédito fiscal recuperable', usd(R.credTot), ars(R.credArs), 'credit'],
+    ['Costo real del lote', usd(R.realTot), ars(R.realArs) + ' pagados · ' + ars(R.realTot*tc) + ' a dólar actual', 'real'],
     ['Coeficiente de importación', R.fobTot>0 ? fNum.format(R.realTot/R.fobTot)+'×' : '—', 'Costo real ÷ FOB', 'real']
   ].map(function(k){
     return '<div class="kpi '+k[3]+'"><div class="l">'+k[0]+'</div><div class="v">'+k[1]+'</div><div class="s">'+k[2]+'</div></div>';
@@ -851,12 +867,13 @@ function recalc(){
       '<td class="out">'+usd(x.gNDu)+'</td>'+
       '<td class="out">'+usd(x.iNDu)+'</td>'+
       '<td class="out"><b>'+usd(x.realU)+'</b></td>'+
+      '<td class="out"><b>'+ars(x.realArsU)+'</b></td>'+
       '<td class="out"><b>'+ars(x.realU*tc)+'</b></td>'+
-      '<td class="out">'+ars(x.credU*tc)+'</td>'+
-      '<td class="out">'+ars((x.realU+x.credU)*tc)+'</td>'+
-      '<td class="out">'+ars(x.realLine*tc)+'</td></tr>';
+      '<td class="out">'+ars(x.credArsU)+'</td>'+
+      '<td class="out">'+ars(x.realArsU+x.credArsU)+'</td>'+
+      '<td class="out">'+ars(x.realArsLine)+'</td></tr>';
   }).join('');
-  $('tfCostos').innerHTML = '<tr class="tot"><td colspan="9">Total lote</td><td class="out">'+ars(R.realTot*tc)+'</td></tr>';
+  $('tfCostos').innerHTML = '<tr class="tot"><td colspan="10">Total lote</td><td class="out">'+ars(R.realArs)+'</td></tr>';
 
   var k = 1 + n(S.iva)/100 + n(S.iibb)/100;
   var r = n(S.margen)/100;
@@ -909,7 +926,7 @@ function recalc(){
   var ivaDeb = neto * n(S.iva)/100, iibbVta = neto * n(S.iibb)/100;
   var ivaCred = 0, ganCred = 0, iibbAd = 0;
   R.imps.forEach(function(ix){
-    var c = String(ix.t.concepto||'').toLowerCase(), a = ix.usd * tc;
+    var c = String(ix.t.concepto||'').toLowerCase(), a = ix.ars;
     if (ix.t.deducible && /iva/.test(c)) ivaCred += a;
     else if (ix.t.deducible && /ganancia/.test(c)) ganCred += a;
     if (/iibb|ingresos brutos/.test(c)) iibbAd += a;
@@ -934,7 +951,8 @@ function recalc(){
 
   if (1 - r - n(S.ml.com)/100*k <= 0) alertas.push('Con esa rentabilidad y comisión, Mercado Libre no tiene precio posible: bajá la rentabilidad objetivo o revisá la comisión.');
   if (1 - r - comTN(S.tn.comNube)*k <= 0) alertas.push('Con esa rentabilidad y comisión, Tienda Nube no tiene precio posible.');
-  if (!(tc > 0)) alertas.push('Cargá la cotización del dólar.');
+  if (!(tc > 0)) alertas.push('Cargá el dólar actual.');
+  if (tc > 0 && R.tcP > 0 && tc < R.tcP) alertas.push('El dólar actual es menor que el dólar al pagar: los precios quedan calculados con un costo de reposición más bajo que lo que pagaste.');
   if (R.prods.some(function(x){ return x.qty <= 0; })) alertas.push('Hay productos con cantidad 0: no se les puede calcular costo unitario.');
   $('alertas').innerHTML = alertas.map(esc).join('<br>');
 }
@@ -1036,6 +1054,7 @@ function abrirPedido(id){
     var meta = LISTA.filter(function(x){ return x.id === id; })[0] || {id:id};
     S = valido(st) ? st : ejemplo();
     if (!S.proy) S.proy = 'ml'; if (!S.proyIibb) S.proyIibb = 'no';
+    if (S.tcPago == null) S.tcPago = S.tc; if (S.tcImp == null) S.tcImp = S.tcPago;
     PED = {id:id, nombre:meta.nombre, creado:meta.creado, actualizado:meta.actualizado};
     lsSet(PREF, id);
     $('delBox').hidden = true; $('alertas').textContent = '';
