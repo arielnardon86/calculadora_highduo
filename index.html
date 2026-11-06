@@ -211,7 +211,7 @@ button.primary:hover{background:var(--green-deep);color:var(--white);border-colo
       </label>
     </div>
     <p class="hint"><b>Dólar actual:</b> valúa el costo a reposición para calcular los precios de venta. <b>Dólar al pagar:</b> pasa a pesos el FOB y los gastos en USD (y a USD los gastos en ARS). <b>Dólar de impuestos:</b> pasa a pesos los aranceles e impuestos (y a USD los montos fijos en ARS).</p>
-    <p class="hint">La rentabilidad se mide sobre el precio neto (precio final sin IVA ni IIBB). Precio final = precio neto × (1 + IVA + IIBB).</p>
+    <p class="hint">La rentabilidad se mide sobre el precio neto: lo que queda después de IVA e IIBB. El IVA se calcula sobre el precio sin IVA y el IIBB sobre ese mismo precio sin IVA, como en la factura. Precio final = precio neto ÷ (1 − IIBB) × (1 + IVA).</p>
   </section>
 
   <!-- ========== IMPORTACIÓN ========== -->
@@ -366,10 +366,19 @@ button.primary:hover{background:var(--green-deep);color:var(--white);border-colo
           </select>
         </label>
       </div>
+      <h3>Otras facturas de la empresa</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Concepto</th><th class="r">IVA crédito $</th><th class="r">IIBB a cuenta $</th><th></th></tr></thead>
+          <tbody id="tbFacturas"></tbody>
+        </table>
+      </div>
+      <button class="add" type="button" data-add="facturas">+ Agregar factura</button>
+      <p class="hint">IVA de facturas A de otros gastos (servicios, insumos, envíos, etc.) y percepciones o retenciones de IIBB que te hicieron (por ejemplo las de Mercado Pago). Se descuentan de lo que pagás.</p>
       <div class="tbl-wrap" style="margin-top:12px">
         <table><tbody id="tbTax"></tbody></table>
       </div>
-      <p class="hint">Usa el precio de cada producto en ese canal (tu precio si lo cargaste, si no el sugerido) por la cantidad del lote. IVA débito e IIBB se calculan sobre el precio neto (sin IVA ni IIBB). El crédito de IVA suma el IVA y el IVA adicional pagados en aduana y el IVA de las comisiones del canal (en Mercado Libre también el del envío o costo por unidad). No incluye el IVA de otras compras.</p>
+      <p class="hint">Usa el precio de cada producto en ese canal (tu precio si lo cargaste, si no el sugerido) por la cantidad del lote. IVA débito e IIBB se calculan sobre las ventas sin IVA. El crédito de IVA suma los impuestos con IVA marcados deducibles, el IVA de las comisiones del canal (en Mercado Libre también el del envío o costo por unidad) y el de tus otras facturas. El resultado usa los pesos que realmente pagaste por el lote (dólar al pagar y de impuestos) y no incluye Ganancias de la empresa ni gastos fijos.</p>
     </section>
     </div>
   </div>
@@ -402,7 +411,7 @@ button.primary:hover{background:var(--green-deep);color:var(--white);border-colo
     <details>
       <summary>¿Cómo se calcula?</summary>
       <div class="formula">
-        <b>Mercado Libre:</b> Precio final = (Costo real + cargo ML sin IVA + otro costo) × (1 + IVA + IIBB) ÷ (1 − Rentabilidad − Comisión ML sin IVA × (1 + IVA + IIBB)). La comisión y los cargos de ML se toman sin su IVA porque ese IVA lo recuperás.
+        <b>Mercado Libre:</b> Precio final = (Costo real + cargo ML sin IVA + otro costo) × k ÷ (1 − Rentabilidad − Comisión ML sin IVA × k), con k = (1 + IVA) ÷ (1 − IIBB). La comisión y los cargos de ML se toman sin su IVA porque ese IVA lo recuperás.
         El cargo ML es el <b>costo por unidad vendida</b> del tramo si el precio final queda por debajo del umbral, o el <b>costo de envío</b> según el peso si queda igual o por encima. Se elige el precio más bajo que cumple la rentabilidad y respeta el tramo.
         <br><b>Tienda Nube:</b> misma lógica, con la comisión de Pago Nube o de transferencia (sin su IVA, que también recuperás) y sin cargo de envío.
         <br><b>Margen</b> = (Precio neto − Costo real − comisión − cargos) ÷ Precio neto, donde Precio neto = Precio final ÷ (1 + IVA + IIBB).
@@ -640,6 +649,12 @@ function renderInputs(){
     return '<tr><td>'+inp('tramos',t.id,'hasta',t.hasta)+'</td><td>'+inp('tramos',t.id,'cargo',t.cargo)+'</td><td>'+del('tramos',t.id)+'</td></tr>';
   }).join('');
 
+  if (!Array.isArray(S.facturas)) S.facturas = [];
+  $('tbFacturas').innerHTML = S.facturas.length ? S.facturas.map(function(f){
+    return '<tr><td>'+inp('facturas',f.id,'concepto',f.concepto,{text:true,cls:'name',ph:'Ej: Factura servicio contable'})+'</td>'+
+      '<td>'+inp('facturas',f.id,'iva',f.iva)+'</td><td>'+inp('facturas',f.id,'iibb',f.iibb)+'</td><td>'+del('facturas',f.id)+'</td></tr>';
+  }).join('') : '<tr><td colspan="4" class="hint">Todavía no cargaste facturas.</td></tr>';
+
   $('tbEnvios').innerHTML = S.ml.envios.map(function(e){
     return '<tr><td>'+inp('envios',e.id,'peso',e.peso)+'</td><td>'+inp('envios',e.id,'medio',e.medio)+'</td><td>'+inp('envios',e.id,'alto',e.alto)+'</td><td>'+del('envios',e.id)+'</td></tr>';
   }).join('');
@@ -665,6 +680,7 @@ function renderInputs(){
 function listRef(name){
   if (name === 'tramos') return S.ml.tramos;
   if (name === 'envios') return S.ml.envios;
+  if (name === 'facturas'){ if (!Array.isArray(S.facturas)) S.facturas = []; return S.facturas; }
   return S[name];
 }
 
@@ -875,12 +891,14 @@ function recalc(){
   }).join('');
   $('tfCostos').innerHTML = '<tr class="tot"><td colspan="10">Total lote</td><td class="out">'+ars(R.realArs)+'</td></tr>';
 
-  var k = 1 + n(S.iva)/100 + n(S.iibb)/100;
+  // Precio final = G × (1 + IVA), con G = precio sin IVA. IIBB = G × alícuota.
+  // Lo que queda para costos y ganancia (neto) = G × (1 − IIBB)  →  precio final = neto × k
+  var k = (1 + n(S.iva)/100) / (1 - n(S.iibb)/100);
   var r = n(S.margen)/100;
   var d = n(S.tn.desc)/100;
   var alertas = [];
 
-  var vta = {ml:0, tn:0, tx:0}, ivaCom = {ml:0, tn:0, tx:0};
+  var vta = {ml:0, tn:0, tx:0}, ivaCom = {ml:0, tn:0, tx:0}, cobros = {ml:0, tn:0, tx:0};
   var ivaMl = (S.ml.ivaIncl === '' || S.ml.ivaIncl == null) ? 0.21 : n(S.ml.ivaIncl)/100;
   var ivaTn = n(S.tn.ivaCom)/100;
   R.prods.forEach(function(x){
@@ -900,6 +918,7 @@ function recalc(){
       vta.ml += pML * x.qty;
       // comisión + cargo (envío o costo por unidad) de ML ya traen el IVA adentro
       ivaCom.ml += (n(S.ml.com)/100 * pML + m.cargo) * ivaMl/(1+ivaMl) * x.qty;
+      cobros.ml += (n(S.ml.com)/100 * pML + m.cargo + n(S.ml.extra)) * x.qty;
     } else { $('mc_'+id).textContent = $('mg_'+id).textContent = $('mm_'+id).textContent = '—'; }
 
     var sugT = precioTN(costo, k, r);
@@ -917,13 +936,17 @@ function recalc(){
       // Tienda Nube cobra la comisión + IVA aparte
       ivaCom.tn += n(S.tn.comNube)/100 * pTN * ivaTn * x.qty;
       ivaCom.tx += n(S.tn.comTransf)/100 * pX * ivaTn * x.qty;
+      cobros.tn += (n(S.tn.comNube)/100 * pTN * (1+ivaTn) + n(S.tn.extra)) * x.qty;
+      cobros.tx += (n(S.tn.comTransf)/100 * pX * (1+ivaTn) + n(S.tn.extra)) * x.qty;
     } else { $('tm_'+id).textContent = $('xs_'+id).textContent = $('xm_'+id).textContent = '—'; }
   });
 
   // ---- impuestos a pagar por la venta del lote
   var canal = S.proy || 'ml';
-  var ventas = vta[canal] || 0, neto = ventas / k;
-  var ivaDeb = neto * n(S.iva)/100, iibbVta = neto * n(S.iibb)/100;
+  var ventas = vta[canal] || 0, sinIva = ventas / (1 + n(S.iva)/100);
+  var ivaDeb = sinIva * n(S.iva)/100, iibbVta = sinIva * n(S.iibb)/100;
+  var ivaFact = 0, iibbFact = 0;
+  (S.facturas || []).forEach(function(f){ ivaFact += n(f.iva); iibbFact += n(f.iibb); });
   var ivaCred = 0, ganCred = 0, iibbAd = 0;
   R.imps.forEach(function(ix){
     var c = String(ix.t.concepto||'').toLowerCase(), a = ix.ars;
@@ -932,22 +955,42 @@ function recalc(){
     if (/iibb|ingresos brutos/.test(c)) iibbAd += a;
   });
   var ivaComCanal = ivaCom[canal] || 0;
-  var ivaPagar = ivaDeb - ivaCred - ivaComCanal;
+  var ivaPagar = ivaDeb - ivaCred - ivaComCanal - ivaFact;
   var iibbDesc = S.proyIibb === 'si' ? Math.min(iibbAd, iibbVta) : 0;
-  var iibbPagar = iibbVta - iibbDesc;
+  var iibbPagar = Math.max(iibbVta - iibbDesc - iibbFact, 0);
+  var iibbFavor = Math.max(iibbDesc + iibbFact - iibbVta, 0);
   var fila = function(l, v, cls){ return '<tr'+(cls?' class="'+cls+'"':'')+'><td>'+l+'</td><td class="out">'+v+'</td></tr>'; };
   $('tbTax').innerHTML =
     fila('Ventas totales (con IVA e IIBB)', ars(ventas)) +
-    fila('Precio neto total (sin impuestos)', ars(neto)) +
-    fila('IVA débito ('+fNum.format(n(S.iva))+'% sobre neto)', ars(ivaDeb)) +
+    fila('Ventas sin IVA', ars(sinIva)) +
+    fila('IVA débito ('+fNum.format(n(S.iva))+'% sobre ventas sin IVA)', ars(ivaDeb)) +
     fila('<span class="menos">− IVA crédito de importación (impuestos con IVA marcados deducibles)</span>', '<span class="menos">− '+ars(ivaCred)+'</span>') +
     fila('<span class="menos">− IVA de comisiones' + (canal === 'ml' ? ' y cargos de envío de Mercado Libre' : ' de Tienda Nube') + '</span>', '<span class="menos">− '+ars(ivaComCanal)+'</span>') +
+    (ivaFact > 0 ? fila('<span class="menos">− IVA de otras facturas de la empresa</span>', '<span class="menos">− '+ars(ivaFact)+'</span>') : '') +
     fila(ivaPagar >= 0 ? 'IVA a pagar' : 'Saldo a favor de IVA', ars(Math.abs(ivaPagar)), 'res') +
-    fila('IIBB ('+fNum.format(n(S.iibb))+'% sobre neto)', ars(iibbVta)) +
+    fila('IIBB ('+fNum.format(n(S.iibb))+'% sobre ventas sin IVA)', ars(iibbVta)) +
     (S.proyIibb === 'si' ? fila('<span class="menos">− IIBB pagado en aduana</span>', '<span class="menos">− '+ars(iibbDesc)+'</span>') : '') +
-    fila('IIBB a pagar', ars(iibbPagar), 'res') +
+    (iibbFact > 0 ? fila('<span class="menos">− Percepciones y retenciones de IIBB</span>', '<span class="menos">− '+ars(iibbFact)+'</span>') : '') +
+    fila(iibbFavor > 0 ? 'Saldo a favor de IIBB' : 'IIBB a pagar', ars(iibbFavor > 0 ? iibbFavor : iibbPagar), 'res') +
     fila('Total IVA + IIBB a pagar', ars(Math.max(ivaPagar,0) + iibbPagar), 'res') +
     (ganCred > 0 ? fila('<span class="menos">Ganancias pagado en aduana (a cuenta del impuesto a las Ganancias)</span>', '<span class="menos">'+ars(ganCred)+'</span>') : '');
+
+  // ---- resultado del lote en pesos, después de pagar IVA e IIBB
+  var cobrosCanal = cobros[canal] || 0;
+  var pagado = R.desembolsoArs;
+  var ganLote = ventas - cobrosCanal - Math.max(ivaPagar, 0) - iibbPagar - pagado;
+  var margenLote = sinIva > 0 ? ganLote / (sinIva - iibbVta) : NaN;
+  var nombreCanal = {ml:'Mercado Libre', tn:'Tienda Nube', tx:'Tienda Nube'}[canal];
+  $('tbTax').innerHTML +=
+    '<tr><td colspan="2" style="padding-top:14px"><b>Resultado del lote después de impuestos</b></td></tr>' +
+    fila('Lo que cobrás de las ventas', ars(ventas)) +
+    fila('<span class="menos">− Comisiones y cargos de ' + nombreCanal + ' (con IVA)</span>', '<span class="menos">− '+ars(cobrosCanal)+'</span>') +
+    fila('<span class="menos">− IVA a pagar</span>', '<span class="menos">− '+ars(Math.max(ivaPagar,0))+'</span>') +
+    fila('<span class="menos">− IIBB a pagar</span>', '<span class="menos">− '+ars(iibbPagar)+'</span>') +
+    fila('<span class="menos">− Lo que pagaste por el lote (mercadería, importación e impuestos)</span>', '<span class="menos">− '+ars(pagado)+'</span>') +
+    fila('Ganancia del lote', ars(ganLote), 'res') +
+    fila('Rentabilidad real del lote', pillM(margenLote, r), 'res') +
+    (ivaPagar < 0 || iibbFavor > 0 ? fila('<span class="menos">Saldo a favor que queda para el próximo período</span>', '<span class="menos">'+ars(Math.max(-ivaPagar,0) + iibbFavor)+'</span>') : '');
 
   if (1 - r - n(S.ml.com)/100*k <= 0) alertas.push('Con esa rentabilidad y comisión, Mercado Libre no tiene precio posible: bajá la rentabilidad objetivo o revisá la comisión.');
   if (1 - r - comTN(S.tn.comNube)*k <= 0) alertas.push('Con esa rentabilidad y comisión, Tienda Nube no tiene precio posible.');
@@ -995,11 +1038,12 @@ document.addEventListener('click', function(e){
       gastos:{id:uid(), concepto:'', moneda:'ARS', monto:0, deducible:false},
       impuestos:{id:uid(), concepto:'', pct:0, fijo:'', fijoArs:'', base:'iva', deducible:false},
       tramos:{id:uid(), hasta:0, cargo:0},
-      envios:{id:uid(), peso:0, medio:0, alto:0}
+      envios:{id:uid(), peso:0, medio:0, alto:0},
+      facturas:{id:uid(), concepto:'', iva:0, iibb:0}
     };
     listRef(add).push(nuevos[add]);
     save(); renderInputs(); recalc();
-    var tb = {productos:'tbProductos', gastos:'tbGastos', impuestos:'tbImpuestos', tramos:'tbTramos', envios:'tbEnvios'}[add];
+    var tb = {productos:'tbProductos', gastos:'tbGastos', impuestos:'tbImpuestos', tramos:'tbTramos', envios:'tbEnvios', facturas:'tbFacturas'}[add];
     var last = $(tb).lastElementChild;
     var first = last && last.querySelector('input,select');
     if (first) first.focus();
@@ -1076,7 +1120,7 @@ function pedidoVacio(base){
   st.productos = [{id:uid(), nombre:'', qty:0, fob:0, cbm:0, peso:0, mlManual:'', tnManual:''}];
   st.gastos.forEach(function(g){ g.monto = 0; });
   st.impuestos.forEach(function(t){ t.fijo = ''; t.fijoArs = ''; });
-  st.impObjetivo = ''; delete st._mod;
+  st.impObjetivo = ''; st.facturas = []; delete st._mod;
   return st;
 }
 $('pedSel').addEventListener('change', function(e){ abrirPedido(e.target.value); });
